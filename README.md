@@ -266,21 +266,6 @@ Kontribusi sangat diterima dan diapresiasi! Berikut cara berkontribusi:
 
 ---
 
-## 📝 Lisensi
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-## 📞 Kontak
-
-**Desa Tababo Selatan**
-- Website: [https://desa-tababo-selatan.vercel.app](https://desa-tababo-selatan.vercel.app)
-- GitHub: [@dprsnf](https://github.com/dprsnf)
-- Email: desa.tababoselatan@example.com
-
----
-
 ## 🙏 Acknowledgments
 
 - [Next.js](https://nextjs.org/)
