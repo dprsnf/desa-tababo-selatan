@@ -1,0 +1,238 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Admin
+model Admin {
+  id          String   @id @default(cuid())
+  namaLengkap String
+  username    String   @unique
+  email       String   @unique
+  password    String
+  role        String   @default("admin")
+  fotoProfil  String?
+  aktif       Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+// Statistik Desa
+model Statistik {
+  id             String   @id @default(cuid())
+  jumlahPenduduk Int      @default(0)
+  lakiLaki       Int      @default(0)
+  perempuan      Int      @default(0)
+  jumlahKeluarga Int      @default(0)
+  luasWilayah    String   @default("0")
+  jumlahRW       Int      @default(0)
+  jumlahRT       Int      @default(0)
+  jumlahDusun    Int      @default(0)
+  updated_at     DateTime @updatedAt
+}
+
+// Kepala Desa & Perangkat
+model KepalaDesaPerangkat {
+  id           String    @id @default(cuid())
+  namaLengkap  String
+  jabatan      String // kepala_desa, sekretaris, bendahara, kasi_pemerintahan, kasi_kesejahteraan, kasi_pelayanan, kepala_dusun, staff
+  nip          String?
+  tempatLahir  String?
+  tanggalLahir DateTime?
+  pendidikan   String?
+  foto         String?
+
+  // Khusus Kepala Desa
+  periode         String? // contoh: "2019-2025"
+  tahunMulai      Int?
+  tahunSelesai    Int?
+  visi            String? @db.Text
+  misi            Json? // Array misi
+  prestasi        String? @db.Text
+  programUnggulan Json? // Array program unggulan
+
+  // Khusus Kepala Dusun
+  namaDusun String?
+
+  // Status
+  sedangMenjabat Boolean @default(false)
+  urutan         Int     @default(0) // Untuk pengurutan tampilan
+
+  dibuat     DateTime @default(now())
+  diperbarui DateTime @updatedAt
+
+  @@index([jabatan])
+  @@index([sedangMenjabat])
+}
+
+// Berita & Pengumuman
+model Berita {
+  id            String    @id @default(cuid())
+  judul         String
+  slug          String    @unique
+  ringkasan     String    @db.Text
+  konten        String    @db.Text
+  gambarUtama   String?
+  kategori      String // berita, pengumuman, kegiatan, agenda
+  tags          Json? // Array tags untuk filtering
+  penulis       String
+  penulis_id    String? // Relasi ke Admin
+  dilihat       Int       @default(0)
+  terbit        Boolean   @default(false)
+  tanggalTerbit DateTime?
+  dibuat        DateTime  @default(now())
+  diperbarui    DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([kategori])
+  @@index([terbit])
+  @@index([tanggalTerbit])
+}
+
+// Pertanggungjawaban
+model Pertanggungjawaban {
+  id        String  @id @default(cuid())
+  tahun     Int
+  jenis     String // apbdes, apbdes_perubahan, lkpj, lppd, keuangan, program
+  judul     String
+  deskripsi String  @db.Text
+  periode   String? // Semester, Triwulan, dll
+
+  // Data Keuangan
+  anggaranTotal    Float?
+  realisasiTotal   Float?
+  persentase       Float?
+  rincianAnggaran  Json? // Array rincian pos anggaran
+  rincianRealisasi Json? // Array rincian realisasi
+
+  // Dokumen & Lampiran
+  dokumen Json? // Array { nama, url, ukuran, tipe }
+
+  terbit        Boolean   @default(false)
+  tanggalTerbit DateTime?
+  dibuat        DateTime  @default(now())
+  diperbarui    DateTime  @updatedAt
+
+  @@index([tahun])
+  @@index([jenis])
+  @@index([terbit])
+}
+
+// Program & Kegiatan
+model Program {
+  id          String  @id @default(cuid())
+  namaProgram String
+  slug        String  @unique
+  deskripsi   String  @db.Text
+  kategori    String // infrastruktur, sosial, ekonomi, kesehatan, pendidikan, lingkungan
+  sumberDana  String? // APBDes, APBD, APBN, Swadaya, dll
+  anggaran    Float?
+  realisasi   Float?
+
+  // Detail Program
+  status          String // direncanakan, berjalan, selesai, ditunda, dibatalkan
+  tanggalMulai    DateTime
+  tanggalSelesai  DateTime?
+  lokasiKegiatan  String?
+  penanggungJawab String?
+  targetPenerima  String? // Jumlah penerima manfaat
+
+  // Media
+  galeri Json? // Array { url, caption }
+
+  terbit     Boolean  @default(true)
+  dibuat     DateTime @default(now())
+  diperbarui DateTime @updatedAt
+
+  @@index([slug])
+  @@index([kategori])
+  @@index([status])
+  @@index([tanggalMulai])
+}
+
+// Layanan Administrasi
+model Layanan {
+  id                String   @id @default(cuid())
+  namaLayanan       String
+  slug              String   @unique
+  deskripsi         String   @db.Text
+  persyaratan       Json // Array persyaratan
+  prosedur          Json // Array langkah-langkah
+  biaya             String? // Gratis, atau nominal
+  waktuPenyelesaian String // contoh: "1 hari kerja"
+  kontak            String?
+  formulir          String? // URL formulir download
+  aktif             Boolean  @default(true)
+  urutan            Int      @default(0)
+  dibuat            DateTime @default(now())
+  diperbarui        DateTime @updatedAt
+
+  @@index([slug])
+  @@index([aktif])
+}
+
+// Media
+model Media {
+  id           String   @id @default(cuid())
+  namaFile     String
+  namaAsli     String // Nama file asli saat diupload
+  url          String
+  path         String? // Path di server
+  jenisMedia   String // gambar, dokumen, video
+  ukuranFile   Int // dalam bytes
+  mimeType     String
+  kategori     String? // untuk kategorisasi
+  deskripsi    String?
+  diuploadOleh String? // Username admin
+  dibuat       DateTime @default(now())
+
+  @@index([jenisMedia])
+  @@index([kategori])
+}
+
+// Pengaturan
+model Pengaturan {
+  id             String  @id @default(cuid())
+  namaSitus      String  @default("Desa Tababo Selatan")
+  tagline        String?
+  deskripsiSitus String  @db.Text
+  logo           String?
+  favicon        String?
+
+  // Kontak & Alamat
+  alamatKantor  String  @db.Text
+  kodePos       String?
+  emailKontak   String?
+  teleponKontak String?
+  faxKontak     String?
+
+  // Media Sosial
+  facebook  String?
+  instagram String?
+  twitter   String?
+  youtube   String?
+
+  // Operasional
+  jamOperasional String? // contoh: "Senin-Jumat: 08.00-15.00"
+  jamIstirahat   String?
+
+  // Peta
+  latlong String? // coordinates
+  urlPeta String? // Google Maps embed URL
+
+  // SEO
+  metaKeywords    String?
+  metaDescription String?
+
+  diperbarui DateTime @updatedAt
+}

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { GiVillage } from "react-icons/gi";
 import { MdAdminPanelSettings } from "react-icons/md";
 
 export default function AdminLogin() {
-  const router = useRouter();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -21,16 +22,15 @@ export default function AdminLogin() {
     setError("");
     setLoading(true);
 
-    // Simulasi login - nanti bisa diganti dengan API
-    setTimeout(() => {
-      if (formData.username === "admin" && formData.password === "admin123") {
-        localStorage.setItem("adminToken", "authenticated");
-        router.push("/admin/dashboard");
-      } else {
-        setError("Username atau password salah!");
-        setLoading(false);
-      }
-    }, 1000);
+    try {
+      await login(formData.username, formData.password);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Username atau password salah!";
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,9 +45,7 @@ export default function AdminLogin() {
             <div className="absolute inset-0 bg-green-400/30 rounded-full blur-2xl"></div>
             <GiVillage className="text-7xl text-green-300 relative z-10 animate-pulse" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Admin Panel
-          </h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Admin Panel</h1>
           <p className="text-green-200">Desa Tababo Selatan</p>
         </div>
 
@@ -77,7 +75,9 @@ export default function AdminLogin() {
                 <input
                   type="text"
                   value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                  }
                   className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
                   placeholder="Masukkan username"
                   required
@@ -97,7 +97,9 @@ export default function AdminLogin() {
                 <input
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
                   placeholder="Masukkan password"
                   required
@@ -110,20 +112,6 @@ export default function AdminLogin() {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
-            </div>
-
-            {/* Remember Me */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
-                />
-                <span className="text-sm text-gray-600">Ingat saya</span>
-              </label>
-              <a href="#" className="text-sm text-green-600 hover:text-green-700 font-medium">
-                Lupa password?
-              </a>
             </div>
 
             {/* Submit Button */}
@@ -144,23 +132,16 @@ export default function AdminLogin() {
               )}
             </button>
           </form>
-
-          {/* Info */}
-          <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-            <p className="text-xs text-green-700 text-center">
-              <strong>Demo:</strong> Username: <code className="bg-green-100 px-2 py-1 rounded">admin</code> | Password: <code className="bg-green-100 px-2 py-1 rounded">admin123</code>
-            </p>
-          </div>
         </div>
 
         {/* Back to Home */}
         <div className="text-center mt-6">
-          <a
+          <Link
             href="/"
-            className="text-green-200 hover:text-white transition-colors text-sm font-medium"
+            className="text-white hover:text-green-300 transition-colors font-medium"
           >
             ← Kembali ke Beranda
-          </a>
+          </Link>
         </div>
       </div>
     </div>
