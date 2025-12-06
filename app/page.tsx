@@ -1,8 +1,4 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import {
   FaLeaf,
   FaUsers,
@@ -12,106 +8,120 @@ import {
 } from "react-icons/fa";
 import { GiVillage, GiFarmer } from "react-icons/gi";
 import { MdLocationOn } from "react-icons/md";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
 import StatCard from "@/components/StatCard";
 import FeatureCard from "@/components/FeatureCard";
-import NewsCard from "@/components/NewsCard";
 import SectionTitle from "@/components/SectionTitle";
+import prisma from "@/lib/prisma";
+import HeroSlider from "@/app/HeroSlider";
 
-interface HeroData {
-  judul: string;
-  subjudul: string;
-  deskripsi: string;
-  gambar: string;
-}
+async function getData() {
+  try {
+    // Fetch hero section
+    const heroSection = await prisma.heroSection.findFirst({
+      where: { aktif: true },
+      orderBy: { urutan: "asc" },
+    });
 
-interface StatData {
-  label: string;
-  value: string;
-  icon?: React.ReactNode;
-}
+    // Fetch statistik
+    const statistik = await prisma.statistik.findFirst();
 
-interface SliderData {
-  id: string;
-  judul: string;
-  konten: string | null;
-  gambar: string | null;
-  link: string | null;
-  tipe: string;
-  dibuat: string;
-}
+    // Fetch active sliders
+    const now = new Date();
+    const sliders = await prisma.slider.findMany({
+      where: {
+        aktif: true,
+        OR: [
+          {
+            AND: [
+              { tanggalMulai: { lte: now } },
+              { tanggalSelesai: { gte: now } },
+            ],
+          },
+          {
+            tanggalMulai: null,
+            tanggalSelesai: null,
+          },
+        ],
+      },
+      orderBy: [
+        { urutan: "asc" },
+        { dibuat: "desc" },
+      ],
+      take: 6,
+    });
 
-export default function Home() {
-  const [hero, setHero] = useState<HeroData>({
-    judul: "Desa Tababo Selatan",
-    subjudul: "Desa Hijau, Sejahtera, dan Mandiri",
-    deskripsi: "Kecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]",
-    gambar: "",
-  });
+    // Fetch berita terbaru
+    const berita = await prisma.berita.findMany({
+      where: { terbit: true },
+      orderBy: { tanggalTerbit: "desc" },
+      take: 6,
+    });
 
-  const [stats, setStats] = useState<StatData[]>([
-    { label: "Jumlah Penduduk", value: "2,500+", icon: <FaUsers /> },
-    { label: "Luas Wilayah", value: "450 Ha", icon: <MdLocationOn /> },
-    { label: "Dusun", value: "4", icon: <GiVillage /> },
-    { label: "UMKM Aktif", value: "50+", icon: <FaBuilding /> },
-  ]);
-
-  const [sliders, setSliders] = useState<SliderData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch beranda data (hero + stats)
-        const berandaRes = await fetch("/api/beranda");
-        if (berandaRes.ok) {
-          const berandaData = await berandaRes.json();
-          if (berandaData.success && berandaData.data) {
-            if (berandaData.data.hero) {
-              setHero(berandaData.data.hero);
-            }
-            if (berandaData.data.stats) {
-              // Add icons to stats
-              const statsWithIcons = berandaData.data.stats.map(
-                (stat: StatData) => {
-                  let icon = <FaUsers />;
-                  if (stat.label.toLowerCase().includes("luas")) {
-                    icon = <MdLocationOn />;
-                  } else if (stat.label.toLowerCase().includes("dusun")) {
-                    icon = <GiVillage />;
-                  } else if (stat.label.toLowerCase().includes("umkm")) {
-                    icon = <FaBuilding />;
-                  }
-                  return { ...stat, icon };
-                },
-              );
-              setStats(statsWithIcons);
-            }
-          }
-        }
-
-        // Fetch slider data
-        const sliderRes = await fetch("/api/slider-publik");
-        if (sliderRes.ok) {
-          const sliderData = await sliderRes.json();
-          if (sliderData.success && sliderData.data) {
-            setSliders(sliderData.data);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+    return {
+      heroSection,
+      statistik,
+      sliders,
+      berita,
     };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      heroSection: null,
+      statistik: null,
+      sliders: [],
+      berita: [],
+    };
+  }
+}
 
-    fetchData();
-  }, []);
+export default async function Home() {
+  const { heroSection, statistik, sliders, berita } = await getData();
+
+  // Default hero data
+  const hero = heroSection
+    ? {
+        judul: heroSection.judul || "Desa Tababo Selatan",
+        subjudul: heroSection.subjudul || "Desa Hijau, Sejahtera, dan Mandiri",
+        deskripsi: heroSection.deskripsi || "Kecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]",
+        gambar: heroSection.gambar || "",
+      }
+    : {
+        judul: "Desa Tababo Selatan",
+        subjudul: "Desa Hijau, Sejahtera, dan Mandiri",
+        deskripsi: "Kecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]",
+        gambar: "",
+      };
+
+  // Stats data
+  const stats = statistik
+    ? [
+        {
+          label: "Jumlah Penduduk",
+          value: statistik.jumlahPenduduk.toLocaleString("id-ID"),
+          icon: <FaUsers />,
+        },
+        {
+          label: "Luas Wilayah",
+          value: `${statistik.luasWilayah} Ha`,
+          icon: <MdLocationOn />,
+        },
+        {
+          label: "Dusun",
+          value: statistik.jumlahDusun.toString(),
+          icon: <GiVillage />,
+        },
+        {
+          label: "RT/RW",
+          value: `${statistik.jumlahRT}/${statistik.jumlahRW}`,
+          icon: <FaBuilding />,
+        },
+      ]
+    : [
+        { label: "Jumlah Penduduk", value: "2,500+", icon: <FaUsers /> },
+        { label: "Luas Wilayah", value: "450 Ha", icon: <MdLocationOn /> },
+        { label: "Dusun", value: "4", icon: <GiVillage /> },
+        { label: "RT/RW", value: "12/4", icon: <FaBuilding /> },
+      ];
 
   const features = [
     {
@@ -151,57 +161,26 @@ export default function Home() {
     },
   ];
 
-  // Default news if no sliders
-  const defaultNews = [
-    {
-      title: "Program Pembangunan Infrastruktur 2024",
-      date: "15 November 2024",
-      image:
-        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-      link: null,
-    },
-    {
-      title: "Pelatihan UMKM Desa Sukses Digelar",
-      date: "10 November 2024",
-      image:
-        "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=800&q=80",
-      link: null,
-    },
-    {
-      title: "Panen Raya Padi Tahun Ini Meningkat",
-      date: "5 November 2024",
-      image:
-        "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&q=80",
-      link: null,
-    },
-  ];
-
-  const newsItems =
-    sliders.length > 0
-      ? sliders.map((slider) => ({
-          title: slider.judul,
-          date: new Date(slider.dibuat).toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          }),
-          image:
-            slider.gambar ||
-            "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-          link: slider.link,
-        }))
-      : defaultNews;
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-emerald-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-green-700 text-lg">Memuat...</p>
-        </div>
-      </div>
-    );
-  }
+  // Prepare news from berita or sliders
+  const newsItems = berita.length > 0
+    ? berita.map((item: any) => ({
+        id: item.id,
+        judul: item.judul,
+        konten: item.ringkasan,
+        gambar: item.gambarUtama,
+        link: `/berita/${item.slug}`,
+        tipe: "berita",
+        dibuat: item.dibuat.toISOString(),
+      }))
+    : sliders.map((slider: any) => ({
+        id: slider.id,
+        judul: slider.judul,
+        konten: slider.konten,
+        gambar: slider.gambar,
+        link: slider.link,
+        tipe: slider.tipe,
+        dibuat: slider.dibuat.toISOString(),
+      }));
 
   return (
     <div className="bg-gradient-to-b from-green-50 to-emerald-50">
@@ -216,57 +195,25 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzBoLTZWMjRoNnYtem0wIDZoLTZWMzBoNnYxOHptNiAwaDZ2LTZoLTZ2Nm0wLTEyaDZ2LTZoLTZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
 
         <div className="container mx-auto px-4 z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center text-white"
-          >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mb-6"
-            >
-              <GiVillage className="text-8xl mx-auto text-green-200" />
-            </motion.div>
+          <div className="text-center text-white">
+            <div className="mb-6">
+              <GiVillage className="text-8xl mx-auto text-green-200 animate-pulse" />
+            </div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-5xl md:text-7xl font-bold mb-6"
-            >
-              {hero.judul}
-            </motion.h1>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6">{hero.judul}</h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl mb-4 text-green-100"
-            >
+            <p className="text-xl md:text-2xl mb-4 text-green-100">
               {hero.subjudul}
-            </motion.p>
+            </p>
 
             {hero.deskripsi && (
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="text-lg md:text-xl mb-8 text-green-200 max-w-3xl mx-auto"
-              >
+              <p className="text-lg md:text-xl mb-8 text-green-200 max-w-3xl mx-auto">
                 <MdLocationOn className="inline text-2xl mb-1" />{" "}
                 {hero.deskripsi}
-              </motion.p>
+              </p>
             )}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex gap-4 justify-center flex-wrap"
-            >
+            <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/struktur-organisasi"
                 className="bg-white text-green-700 px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-50 transition-all transform hover:scale-105 shadow-lg"
@@ -279,11 +226,11 @@ export default function Home() {
               >
                 Keunggulan Desa
               </Link>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
 
-        {/* Simplified decoration */}
+        {/* Decorations */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-10">
           <FaLeaf className="absolute top-20 left-10 text-6xl text-green-300 animate-pulse" />
           <FaLeaf
@@ -298,19 +245,13 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                viewport={{ once: true }}
-              >
+              <div key={index}>
                 <StatCard
                   icon={stat.icon}
                   value={stat.value}
                   label={stat.label}
                 />
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -319,24 +260,13 @@ export default function Home() {
       {/* Features Section */}
       <section className="py-20 bg-gradient-to-b from-green-50 to-white">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <SectionTitle>Informasi Desa</SectionTitle>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                viewport={{ once: true }}
-              >
+              <div key={index}>
                 <FeatureCard
                   icon={feature.icon}
                   title={feature.title}
@@ -344,7 +274,7 @@ export default function Home() {
                   link={feature.link}
                   color={feature.color}
                 />
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -353,39 +283,12 @@ export default function Home() {
       {/* News Carousel Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <SectionTitle>Berita & Kegiatan Terkini</SectionTitle>
-          </motion.div>
+          </div>
 
           {newsItems.length > 0 ? (
-            <Swiper
-              modules={[Autoplay, Pagination]}
-              spaceBetween={30}
-              slidesPerView={1}
-              breakpoints={{
-                640: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-              }}
-              autoplay={{ delay: 3000, disableOnInteraction: false }}
-              pagination={{ clickable: true }}
-              className="pb-12"
-            >
-              {newsItems.map((item, index) => (
-                <SwiperSlide key={index}>
-                  <NewsCard
-                    title={item.title}
-                    date={item.date}
-                    image={item.image}
-                    link={item.link}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <HeroSlider sliders={newsItems} />
           ) : (
             <div className="text-center py-12 text-gray-500">
               <FaNewspaper className="text-5xl mx-auto mb-4 opacity-30" />
@@ -400,12 +303,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzBoLTZWMjRoNnYtem0wIDZoLTZWMzBoNnYxOHptNiAwaDZ2LTZoLTZ2Nm0wLTEyaDZ2LTZoLTZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <GiFarmer className="text-7xl mx-auto mb-6 text-green-200" />
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Mari Bersama Membangun Desa
@@ -428,7 +326,7 @@ export default function Home() {
                 Hubungi Kami
               </a>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>
