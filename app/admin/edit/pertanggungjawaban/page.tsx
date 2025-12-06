@@ -204,7 +204,7 @@ function EditPertanggungjawaban() {
                       apbdes: { ...formData.apbdes, tahun: e.target.value },
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                 />
               </div>
               <div>
@@ -223,7 +223,7 @@ function EditPertanggungjawaban() {
                       },
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                 />
               </div>
               <div>
@@ -239,7 +239,7 @@ function EditPertanggungjawaban() {
                       apbdes: { ...formData.apbdes, belanja: e.target.value },
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                 />
               </div>
               <div>
@@ -255,7 +255,7 @@ function EditPertanggungjawaban() {
                       apbdes: { ...formData.apbdes, surplus: e.target.value },
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                 />
               </div>
             </div>
@@ -299,7 +299,7 @@ function EditPertanggungjawaban() {
                           newData[index].bidang = e.target.value;
                           setFormData({ ...formData, realisasi: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                       />
                     </div>
                     <div>
@@ -314,7 +314,7 @@ function EditPertanggungjawaban() {
                           newData[index].anggaran = e.target.value;
                           setFormData({ ...formData, realisasi: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                       />
                     </div>
                     <div>
@@ -329,7 +329,7 @@ function EditPertanggungjawaban() {
                           newData[index].realisasi = e.target.value;
                           setFormData({ ...formData, realisasi: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                       />
                     </div>
                   </div>
@@ -383,7 +383,7 @@ function EditPertanggungjawaban() {
                           newData[index].nama = e.target.value;
                           setFormData({ ...formData, program: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                       />
                     </div>
                     <div>
@@ -397,7 +397,7 @@ function EditPertanggungjawaban() {
                           newData[index].status = e.target.value;
                           setFormData({ ...formData, program: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                       >
                         <option>Berjalan</option>
                         <option>Selesai</option>
@@ -416,7 +416,7 @@ function EditPertanggungjawaban() {
                           newData[index].dana = e.target.value;
                           setFormData({ ...formData, program: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                       />
                     </div>
                   </div>

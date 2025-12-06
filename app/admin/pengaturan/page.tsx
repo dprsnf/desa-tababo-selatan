@@ -151,7 +151,7 @@ export default function PengaturanPage() {
                       required
                       value={formData.namaDesa}
                       onChange={(e) => setFormData({ ...formData, namaDesa: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                       placeholder="Contoh: Tababo Selatan"
                     />
                   </div>
@@ -164,7 +164,7 @@ export default function PengaturanPage() {
                       type="text"
                       value={formData.tagline}
                       onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                       placeholder="Contoh: Desa Maju dan Sejahtera"
                     />
                   </div>
@@ -178,7 +178,7 @@ export default function PengaturanPage() {
                     rows={2}
                     value={formData.alamat}
                     onChange={(e) => setFormData({ ...formData, alamat: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="Jalan, nomor, dusun/dukuh"
                   />
                 </div>
@@ -192,7 +192,7 @@ export default function PengaturanPage() {
                       type="text"
                       value={formData.kecamatan}
                       onChange={(e) => setFormData({ ...formData, kecamatan: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     />
                   </div>
 
@@ -204,7 +204,7 @@ export default function PengaturanPage() {
                       type="text"
                       value={formData.kabupaten}
                       onChange={(e) => setFormData({ ...formData, kabupaten: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     />
                   </div>
 
@@ -216,7 +216,7 @@ export default function PengaturanPage() {
                       type="text"
                       value={formData.provinsi}
                       onChange={(e) => setFormData({ ...formData, provinsi: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     />
                   </div>
 
@@ -228,7 +228,7 @@ export default function PengaturanPage() {
                       type="text"
                       value={formData.kodePos}
                       onChange={(e) => setFormData({ ...formData, kodePos: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     />
                   </div>
                 </div>
@@ -241,7 +241,7 @@ export default function PengaturanPage() {
                     type="text"
                     value={formData.jamOperasional}
                     onChange={(e) => setFormData({ ...formData, jamOperasional: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="Contoh: Senin - Jumat, 08.00 - 16.00 WIB"
                   />
                 </div>
@@ -262,7 +262,7 @@ export default function PengaturanPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="email@desa.id"
                   />
                 </div>
@@ -275,7 +275,7 @@ export default function PengaturanPage() {
                     type="tel"
                     value={formData.telepon}
                     onChange={(e) => setFormData({ ...formData, telepon: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="(0xxx) xxxxxxx"
                   />
                 </div>
@@ -288,7 +288,7 @@ export default function PengaturanPage() {
                     type="tel"
                     value={formData.whatsapp}
                     onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="08xxxxxxxxxx"
                   />
                 </div>
@@ -309,7 +309,7 @@ export default function PengaturanPage() {
                     type="url"
                     value={formData.facebook}
                     onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="https://facebook.com/..."
                   />
                 </div>
@@ -322,7 +322,7 @@ export default function PengaturanPage() {
                     type="url"
                     value={formData.instagram}
                     onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="https://instagram.com/..."
                   />
                 </div>
@@ -335,7 +335,7 @@ export default function PengaturanPage() {
                     type="url"
                     value={formData.youtube}
                     onChange={(e) => setFormData({ ...formData, youtube: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="https://youtube.com/..."
                   />
                 </div>
@@ -355,7 +355,7 @@ export default function PengaturanPage() {
                   type="url"
                   value={formData.logo}
                   onChange={(e) => setFormData({ ...formData, logo: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                   placeholder="https://example.com/logo.png"
                 />
                 {formData.logo && (
@@ -389,7 +389,7 @@ export default function PengaturanPage() {
                       type="text"
                       value={formData.kepalaDesaNama}
                       onChange={(e) => setFormData({ ...formData, kepalaDesaNama: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     />
                   </div>
 
@@ -401,7 +401,7 @@ export default function PengaturanPage() {
                       type="text"
                       value={formData.kepalaDesaNIP}
                       onChange={(e) => setFormData({ ...formData, kepalaDesaNIP: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     />
                   </div>
                 </div>
@@ -414,7 +414,7 @@ export default function PengaturanPage() {
                     type="url"
                     value={formData.kepalaDesaFoto}
                     onChange={(e) => setFormData({ ...formData, kepalaDesaFoto: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="https://example.com/foto-kades.jpg"
                   />
                   {formData.kepalaDesaFoto && (
@@ -448,7 +448,7 @@ export default function PengaturanPage() {
                     rows={4}
                     value={formData.visi}
                     onChange={(e) => setFormData({ ...formData, visi: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="Tuliskan visi desa..."
                   />
                 </div>
@@ -461,7 +461,7 @@ export default function PengaturanPage() {
                     rows={6}
                     value={formData.misi}
                     onChange={(e) => setFormData({ ...formData, misi: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                     placeholder="Tuliskan misi desa (pisahkan dengan enter untuk setiap poin)..."
                   />
                   <p className="mt-1 text-sm text-gray-500">
@@ -484,7 +484,7 @@ export default function PengaturanPage() {
                   rows={8}
                   value={formData.sejarah}
                   onChange={(e) => setFormData({ ...formData, sejarah: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-900"
                   placeholder="Tuliskan sejarah singkat desa..."
                 />
               </div>

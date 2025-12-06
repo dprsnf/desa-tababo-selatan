@@ -255,7 +255,7 @@ function CreateBeritaPage() {
                             tanggalTerbit: e.target.value,
                           })
                         }
-                        className="px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none text-sm"
+                        className="px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none text-sm text-gray-900"
                       />
                     </div>
                   )}

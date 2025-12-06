@@ -74,7 +74,7 @@ export default function CreateLayananPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, namaLayanan: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
                 placeholder="Contoh: Pembuatan KTP, Surat Keterangan Domisili"
               />
             </div>
@@ -90,7 +90,7 @@ export default function CreateLayananPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, kategori: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
               >
                 <option value="">Pilih kategori</option>
                 <option value="Administrasi Kependudukan">
@@ -115,7 +115,7 @@ export default function CreateLayananPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, deskripsi: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
                 placeholder="Jelaskan layanan ini secara detail"
               />
             </div>
@@ -132,7 +132,7 @@ export default function CreateLayananPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, persyaratan: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
                 placeholder="Tuliskan persyaratan yang diperlukan (pisahkan dengan enter untuk daftar)"
               />
               <p className="mt-1 text-sm text-gray-500">
@@ -152,7 +152,7 @@ export default function CreateLayananPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, prosedur: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
                 placeholder="Tuliskan langkah-langkah prosedur (pisahkan dengan enter untuk daftar)"
               />
               <p className="mt-1 text-sm text-gray-500">
@@ -176,7 +176,7 @@ export default function CreateLayananPage() {
                     waktuPenyelesaian: e.target.value,
                   })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
                 placeholder="Contoh: 1-3 hari kerja, 1 minggu"
               />
             </div>
@@ -192,7 +192,7 @@ export default function CreateLayananPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, biaya: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
                 placeholder="Contoh: Gratis, Rp 10.000 (kosongkan jika gratis)"
               />
             </div>
@@ -208,7 +208,7 @@ export default function CreateLayananPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, kontak: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
                 placeholder="Contoh: 08123456789, email@desa.id"
               />
             </div>

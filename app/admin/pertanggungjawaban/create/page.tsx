@@ -77,7 +77,7 @@ export default function CreatePertanggungjawabanPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, judul: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-gray-900"
                 placeholder="Contoh: Laporan Realisasi APBDes 2024"
               />
             </div>
@@ -97,7 +97,7 @@ export default function CreatePertanggungjawabanPage() {
                       tahunAnggaran: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-gray-900"
                 >
                   {years.map((year) => (
                     <option key={year} value={year}>
@@ -117,7 +117,7 @@ export default function CreatePertanggungjawabanPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, kategori: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-gray-900"
                   placeholder="Contoh: Belanja Desa, Pendapatan Desa"
                 />
               </div>
@@ -134,7 +134,7 @@ export default function CreatePertanggungjawabanPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, jenisDokumen: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-gray-900"
               >
                 <option value="">Pilih jenis dokumen</option>
                 <option value="APBDes">
@@ -160,7 +160,7 @@ export default function CreatePertanggungjawabanPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, ringkasan: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-gray-900"
                 placeholder="Tuliskan ringkasan singkat laporan pertanggungjawaban..."
               />
             </div>
@@ -176,7 +176,7 @@ export default function CreatePertanggungjawabanPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, fileDokumen: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-gray-900"
                 placeholder="https://example.com/dokumen.pdf"
               />
               <p className="mt-1 text-sm text-gray-500">

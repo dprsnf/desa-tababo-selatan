@@ -203,7 +203,7 @@ function EditKeunggulan() {
                 onChange={(e) =>
                   setFormData({ ...formData, judulUtama: e.target.value })
                 }
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
               />
             </div>
             <div>
@@ -216,7 +216,7 @@ function EditKeunggulan() {
                 onChange={(e) =>
                   setFormData({ ...formData, deskripsiHero: e.target.value })
                 }
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
               />
             </div>
           </div>
@@ -262,7 +262,7 @@ function EditKeunggulan() {
                         newData[index].emoji = e.target.value;
                         setFormData({ ...formData, pertanian: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-2xl text-center"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-2xl text-center text-gray-900"
                     />
                   </div>
                   <div>
@@ -277,7 +277,7 @@ function EditKeunggulan() {
                         newData[index].nama = e.target.value;
                         setFormData({ ...formData, pertanian: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
                     />
                   </div>
                   <div className="col-span-2">
@@ -292,7 +292,7 @@ function EditKeunggulan() {
                         newData[index].deskripsi = e.target.value;
                         setFormData({ ...formData, pertanian: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
                     />
                   </div>
                 </div>
@@ -415,7 +415,7 @@ function EditKeunggulan() {
                         newData[index].emoji = e.target.value;
                         setFormData({ ...formData, umkm: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-2xl text-center"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-2xl text-center text-gray-900"
                     />
                   </div>
                   <div>
@@ -430,7 +430,7 @@ function EditKeunggulan() {
                         newData[index].nama = e.target.value;
                         setFormData({ ...formData, umkm: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
                     />
                   </div>
                   <div className="col-span-2">
@@ -445,7 +445,7 @@ function EditKeunggulan() {
                         newData[index].deskripsi = e.target.value;
                         setFormData({ ...formData, umkm: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
                     />
                   </div>
                 </div>
@@ -502,7 +502,7 @@ function EditKeunggulan() {
                         newData[index].emoji = e.target.value;
                         setFormData({ ...formData, wisata: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-2xl text-center"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-2xl text-center text-gray-900"
                     />
                   </div>
                   <div>
@@ -517,7 +517,7 @@ function EditKeunggulan() {
                         newData[index].nama = e.target.value;
                         setFormData({ ...formData, wisata: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
                     />
                   </div>
                   <div className="col-span-2">
@@ -532,7 +532,7 @@ function EditKeunggulan() {
                         newData[index].deskripsi = e.target.value;
                         setFormData({ ...formData, wisata: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
                     />
                   </div>
                 </div>
@@ -572,7 +572,7 @@ function EditKeunggulan() {
                     sdm: { ...formData.sdm, jumlahPenduduk: e.target.value },
                   })
                 }
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
               />
             </div>
             <div>
@@ -588,7 +588,7 @@ function EditKeunggulan() {
                     sdm: { ...formData.sdm, usiaProduktif: e.target.value },
                   })
                 }
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
               />
             </div>
             <div>
@@ -604,7 +604,7 @@ function EditKeunggulan() {
                     sdm: { ...formData.sdm, kelompokUsaha: e.target.value },
                   })
                 }
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
               />
             </div>
           </div>

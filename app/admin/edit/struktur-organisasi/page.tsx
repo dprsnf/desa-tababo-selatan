@@ -213,7 +213,7 @@ function EditStrukturOrganisasi() {
                       },
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                 />
               </div>
               <div>
@@ -232,7 +232,7 @@ function EditStrukturOrganisasi() {
                       },
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                 />
               </div>
             </div>
@@ -260,7 +260,7 @@ function EditStrukturOrganisasi() {
                       },
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                 />
               </div>
               <div>
@@ -279,7 +279,7 @@ function EditStrukturOrganisasi() {
                       },
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                 />
               </div>
             </div>
@@ -323,7 +323,7 @@ function EditStrukturOrganisasi() {
                           newKaur[index].jabatan = e.target.value;
                           setFormData({ ...formData, kaur: newKaur });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                       />
                     </div>
                     <div>
@@ -338,7 +338,7 @@ function EditStrukturOrganisasi() {
                           newKaur[index].nama = e.target.value;
                           setFormData({ ...formData, kaur: newKaur });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                       />
                     </div>
                   </div>
@@ -392,7 +392,7 @@ function EditStrukturOrganisasi() {
                           newKasi[index].jabatan = e.target.value;
                           setFormData({ ...formData, kasi: newKasi });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                       />
                     </div>
                     <div>
@@ -407,7 +407,7 @@ function EditStrukturOrganisasi() {
                           newKasi[index].nama = e.target.value;
                           setFormData({ ...formData, kasi: newKasi });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                       />
                     </div>
                   </div>
@@ -459,7 +459,7 @@ function EditStrukturOrganisasi() {
                           newDusun[index].dusun = e.target.value;
                           setFormData({ ...formData, kepalaDusun: newDusun });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                       />
                     </div>
                     <div>
@@ -474,7 +474,7 @@ function EditStrukturOrganisasi() {
                           newDusun[index].nama = e.target.value;
                           setFormData({ ...formData, kepalaDusun: newDusun });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                       />
                     </div>
                   </div>

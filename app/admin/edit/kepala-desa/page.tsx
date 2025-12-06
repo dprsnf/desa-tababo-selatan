@@ -197,7 +197,7 @@ function EditKepalaDesaSebelumnya() {
                       setFormData({ ...formData, kepalaDesaList: newList });
                     }}
                     placeholder="Contoh: 2018 - 2024"
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                   />
                 </div>
                 <div>
@@ -213,7 +213,7 @@ function EditKepalaDesaSebelumnya() {
                       setFormData({ ...formData, kepalaDesaList: newList });
                     }}
                     placeholder="Nama kepala desa"
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
                   />
                 </div>
               </div>
@@ -231,7 +231,7 @@ function EditKepalaDesaSebelumnya() {
                   }}
                   placeholder="Deskripsi prestasi dan pencapaian selama menjabat..."
                   rows={3}
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none resize-none"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none resize-none text-gray-900"
                 />
               </div>
             </div>

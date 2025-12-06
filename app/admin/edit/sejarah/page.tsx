@@ -164,7 +164,7 @@ function EditSejarah() {
                 onChange={(e) =>
                   setFormData({ ...formData, judulUtama: e.target.value })
                 }
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
               />
             </div>
             <div>
@@ -177,7 +177,7 @@ function EditSejarah() {
                 onChange={(e) =>
                   setFormData({ ...formData, deskripsiHero: e.target.value })
                 }
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none text-gray-900"
               />
             </div>
             <div>
@@ -190,7 +190,7 @@ function EditSejarah() {
                   setFormData({ ...formData, asalUsul: e.target.value })
                 }
                 rows={5}
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none resize-none"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 outline-none resize-none text-gray-900"
               />
             </div>
           </div>
@@ -236,7 +236,7 @@ function EditSejarah() {
                         newData[index].tahun = e.target.value;
                         setFormData({ ...formData, timeline: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                     />
                   </div>
                   <div className="col-span-3">
@@ -251,7 +251,7 @@ function EditSejarah() {
                         newData[index].peristiwa = e.target.value;
                         setFormData({ ...formData, timeline: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                     />
                   </div>
                 </div>
@@ -313,7 +313,7 @@ function EditSejarah() {
                           newData[index].emoji = e.target.value;
                           setFormData({ ...formData, budaya: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-center text-2xl"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-center text-2xl text-gray-900"
                       />
                     </div>
                     <div className="col-span-3">
@@ -328,7 +328,7 @@ function EditSejarah() {
                           newData[index].nama = e.target.value;
                           setFormData({ ...formData, budaya: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                       />
                     </div>
                   </div>
@@ -344,7 +344,7 @@ function EditSejarah() {
                         setFormData({ ...formData, budaya: newData });
                       }}
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm resize-none"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm resize-none text-gray-900"
                     />
                   </div>
                 </div>
@@ -403,7 +403,7 @@ function EditSejarah() {
                         newData[index].nama = e.target.value;
                         setFormData({ ...formData, tokohPenting: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                     />
                   </div>
                   <div>
@@ -418,7 +418,7 @@ function EditSejarah() {
                         newData[index].peran = e.target.value;
                         setFormData({ ...formData, tokohPenting: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                     />
                   </div>
                   <div>
@@ -433,7 +433,7 @@ function EditSejarah() {
                         newData[index].periode = e.target.value;
                         setFormData({ ...formData, tokohPenting: newData });
                       }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                     />
                   </div>
                 </div>

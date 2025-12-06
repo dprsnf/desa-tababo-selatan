@@ -288,7 +288,7 @@ function EditBeranda() {
                             newStats[index].label = e.target.value;
                             setFormData({ ...formData, stats: newStats });
                           }}
-                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                         />
                       </div>
                       <div>
@@ -303,7 +303,7 @@ function EditBeranda() {
                             newStats[index].value = e.target.value;
                             setFormData({ ...formData, stats: newStats });
                           }}
-                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                         />
                       </div>
                     </div>
@@ -347,7 +347,7 @@ function EditBeranda() {
                               newNews[index].title = e.target.value;
                               setFormData({ ...formData, news: newNews });
                             }}
-                            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                           />
                         </div>
                         <div>
@@ -362,7 +362,7 @@ function EditBeranda() {
                               newNews[index].date = e.target.value;
                               setFormData({ ...formData, news: newNews });
                             }}
-                            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm"
+                            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
                           />
                         </div>
                       </div>
