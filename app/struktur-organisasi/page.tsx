@@ -1,11 +1,64 @@
 "use client";
 
-import type { Metadata } from "next";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaUser, FaUserTie, FaUsers } from "react-icons/fa";
 import { GiVillage } from "react-icons/gi";
 
+interface PerangkatDesa {
+  id: string;
+  nama: string;
+  jabatan: string;
+  nip?: string | null;
+  foto?: string | null;
+  kontak?: string | null;
+}
+
+interface StrukturOrganisasiData {
+  kepala_desa?: PerangkatDesa;
+  sekretaris?: PerangkatDesa;
+  kaur?: PerangkatDesa[];
+  kasi?: PerangkatDesa[];
+  kepala_dusun?: PerangkatDesa[];
+  perangkat_lain?: PerangkatDesa[];
+}
+
 export default function StrukturOrganisasi() {
+  const [data, setData] = useState<StrukturOrganisasiData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/struktur-organisasi");
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            setData(result.data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching struktur organisasi:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-emerald-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-green-700 text-lg">Memuat...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 via-emerald-50 to-green-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -24,79 +77,220 @@ export default function StrukturOrganisasi() {
 
         <div className="bg-white rounded-2xl shadow-2xl p-8 border border-green-100">
           {/* Kepala Desa */}
-          <div className="text-center mb-12">
-            <div className="inline-block bg-gradient-to-br from-green-600 to-emerald-700 text-white rounded-2xl px-10 py-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-              <FaUserTie className="text-5xl mx-auto mb-4" />
-              <h2 className="text-2xl font-bold mb-2">Kepala Desa</h2>
-              <p className="text-xl text-green-100">Nama Kepala Desa</p>
+          {data?.kepala_desa ? (
+            <div className="text-center mb-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-block bg-gradient-to-br from-green-600 to-emerald-700 text-white rounded-2xl px-10 py-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              >
+                {data.kepala_desa.foto ? (
+                  <img
+                    src={data.kepala_desa.foto}
+                    alt={data.kepala_desa.nama}
+                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-white"
+                  />
+                ) : (
+                  <FaUserTie className="text-5xl mx-auto mb-4" />
+                )}
+                <h2 className="text-2xl font-bold mb-2">Kepala Desa</h2>
+                <p className="text-xl text-green-100 mb-1">
+                  {data.kepala_desa.nama}
+                </p>
+                {data.kepala_desa.nip && (
+                  <p className="text-sm text-green-200">
+                    NIP: {data.kepala_desa.nip}
+                  </p>
+                )}
+              </motion.div>
             </div>
-          </div>
+          ) : (
+            <div className="text-center mb-12">
+              <div className="inline-block bg-gradient-to-br from-green-600 to-emerald-700 text-white rounded-2xl px-10 py-8 shadow-xl">
+                <FaUserTie className="text-5xl mx-auto mb-4" />
+                <h2 className="text-2xl font-bold mb-2">Kepala Desa</h2>
+                <p className="text-xl text-green-100">-</p>
+              </div>
+            </div>
+          )}
 
           {/* Sekretaris Desa */}
-          <div className="text-center mb-12">
-            <div className="inline-block bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl px-10 py-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-              <FaUser className="text-4xl mx-auto mb-4" />
-              <h2 className="text-2xl font-bold mb-2">Sekretaris Desa</h2>
-              <p className="text-xl text-emerald-100">Nama Sekretaris</p>
+          {data?.sekretaris ? (
+            <div className="text-center mb-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="inline-block bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl px-10 py-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              >
+                {data.sekretaris.foto ? (
+                  <img
+                    src={data.sekretaris.foto}
+                    alt={data.sekretaris.nama}
+                    className="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-4 border-white"
+                  />
+                ) : (
+                  <FaUser className="text-4xl mx-auto mb-4" />
+                )}
+                <h2 className="text-2xl font-bold mb-2">Sekretaris Desa</h2>
+                <p className="text-xl text-emerald-100 mb-1">
+                  {data.sekretaris.nama}
+                </p>
+                {data.sekretaris.nip && (
+                  <p className="text-sm text-emerald-200">
+                    NIP: {data.sekretaris.nip}
+                  </p>
+                )}
+              </motion.div>
             </div>
-          </div>
+          ) : (
+            <div className="text-center mb-12">
+              <div className="inline-block bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl px-10 py-8 shadow-xl">
+                <FaUser className="text-4xl mx-auto mb-4" />
+                <h2 className="text-2xl font-bold mb-2">Sekretaris Desa</h2>
+                <p className="text-xl text-emerald-100">-</p>
+              </div>
+            </div>
+          )}
 
           {/* Kaur dan Kasi */}
-          <div>
-            <h3 className="text-2xl font-bold text-center text-gray-800 mb-6">
-              Kepala Urusan & Kepala Seksi
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {[
-                { title: "Kaur Keuangan", name: "Nama Kaur Keuangan", color: "from-green-500 to-emerald-600" },
-                { title: "Kaur Umum & TU", name: "Nama Kaur Umum", color: "from-emerald-500 to-teal-600" },
-                { title: "Kaur Perencanaan", name: "Nama Kaur Perencanaan", color: "from-teal-500 to-cyan-600" },
-                { title: "Kasi Pemerintahan", name: "Nama Kasi Pemerintahan", color: "from-lime-500 to-green-600" },
-                { title: "Kasi Kesejahteraan", name: "Nama Kasi Kesejahteraan", color: "from-green-500 to-emerald-600" },
-                { title: "Kasi Pelayanan", name: "Nama Kasi Pelayanan", color: "from-emerald-500 to-green-700" }
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  className={`bg-gradient-to-br ${item.color} text-white rounded-xl p-6 text-center shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300`}
-                >
-                  <FaUser className="text-3xl mx-auto mb-3" />
-                  <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                  <p className="text-green-100">{item.name}</p>
-                </div>
-              ))}
+          {((data?.kaur && data.kaur.length > 0) ||
+            (data?.kasi && data.kasi.length > 0)) && (
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold text-center text-gray-800 mb-6">
+                Kepala Urusan & Kepala Seksi
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Kaur */}
+                {data?.kaur?.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                    className={`bg-gradient-to-br ${
+                      [
+                        "from-green-500 to-emerald-600",
+                        "from-emerald-500 to-teal-600",
+                        "from-teal-500 to-cyan-600",
+                      ][index % 3]
+                    } text-white rounded-xl p-6 text-center shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300`}
+                  >
+                    {item.foto ? (
+                      <img
+                        src={item.foto}
+                        alt={item.nama}
+                        className="w-16 h-16 rounded-full mx-auto mb-3 object-cover border-4 border-white"
+                      />
+                    ) : (
+                      <FaUser className="text-3xl mx-auto mb-3" />
+                    )}
+                    <h3 className="font-bold text-lg mb-2">{item.jabatan}</h3>
+                    <p className="text-green-100 mb-1">{item.nama}</p>
+                    {item.nip && (
+                      <p className="text-xs text-green-200">NIP: {item.nip}</p>
+                    )}
+                  </motion.div>
+                ))}
+
+                {/* Kasi */}
+                {data?.kasi?.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 0.2 + (data.kaur?.length || 0) * 0.1 + index * 0.1,
+                    }}
+                    className={`bg-gradient-to-br ${
+                      [
+                        "from-lime-500 to-green-600",
+                        "from-green-500 to-emerald-600",
+                        "from-emerald-500 to-green-700",
+                      ][index % 3]
+                    } text-white rounded-xl p-6 text-center shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300`}
+                  >
+                    {item.foto ? (
+                      <img
+                        src={item.foto}
+                        alt={item.nama}
+                        className="w-16 h-16 rounded-full mx-auto mb-3 object-cover border-4 border-white"
+                      />
+                    ) : (
+                      <FaUser className="text-3xl mx-auto mb-3" />
+                    )}
+                    <h3 className="font-bold text-lg mb-2">{item.jabatan}</h3>
+                    <p className="text-green-100 mb-1">{item.nama}</p>
+                    {item.nip && (
+                      <p className="text-xs text-green-200">NIP: {item.nip}</p>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Kepala Dusun */}
-          <div>
-            <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 flex items-center justify-center gap-3">
-              <FaUsers className="text-green-600" />
-              Kepala Dusun
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { title: "Dusun I", name: "Nama Kadus I" },
-                { title: "Dusun II", name: "Nama Kadus II" },
-                { title: "Dusun III", name: "Nama Kadus III" },
-                { title: "Dusun IV", name: "Nama Kadus IV" }
-              ].map((dusun, index) => (
-                <div
-                  key={index}
-                  className="bg-gradient-to-br from-green-600 to-teal-700 text-white rounded-xl p-6 text-center shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-                >
-                  <GiVillage className="text-4xl mx-auto mb-3" />
-                  <h3 className="font-bold text-lg mb-2">{dusun.title}</h3>
-                  <p className="text-green-100">{dusun.name}</p>
-                </div>
-              ))}
+          {data?.kepala_dusun && data.kepala_dusun.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 flex items-center justify-center gap-3">
+                <FaUsers className="text-green-600" />
+                Kepala Dusun
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {data.kepala_dusun.map((dusun, index) => (
+                  <motion.div
+                    key={dusun.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+                    className="bg-gradient-to-br from-green-600 to-teal-700 text-white rounded-xl p-6 text-center shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                  >
+                    {dusun.foto ? (
+                      <img
+                        src={dusun.foto}
+                        alt={dusun.nama}
+                        className="w-16 h-16 rounded-full mx-auto mb-3 object-cover border-4 border-white"
+                      />
+                    ) : (
+                      <GiVillage className="text-4xl mx-auto mb-3" />
+                    )}
+                    <h3 className="font-bold text-lg mb-2">{dusun.jabatan}</h3>
+                    <p className="text-green-100 mb-1">{dusun.nama}</p>
+                    {dusun.nip && (
+                      <p className="text-xs text-green-200">NIP: {dusun.nip}</p>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Empty state */}
+          {!data?.kepala_desa &&
+            !data?.sekretaris &&
+            (!data?.kaur || data.kaur.length === 0) &&
+            (!data?.kasi || data.kasi.length === 0) &&
+            (!data?.kepala_dusun || data.kepala_dusun.length === 0) && (
+              <div className="text-center py-12">
+                <FaUsers className="text-6xl text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 text-lg">
+                  Data struktur organisasi belum tersedia
+                </p>
+                <p className="text-gray-400 text-sm mt-2">
+                  Silakan isi data melalui halaman admin
+                </p>
+              </div>
+            )}
         </div>
 
         {/* Info Banner */}
         <div className="mt-8 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-6 text-white text-center shadow-xl">
           <p className="text-lg">
-            <strong>Transparansi & Akuntabilitas</strong> - Pemerintahan desa yang melayani dengan sepenuh hati
+            <strong>Transparansi & Akuntabilitas</strong> - Pemerintahan desa
+            yang melayani dengan sepenuh hati
           </p>
         </div>
       </div>

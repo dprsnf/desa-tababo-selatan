@@ -120,6 +120,121 @@ interface PertanggungjawabanData {
   diperbarui: string;
 }
 
+interface HeroSectionData {
+  id: string;
+  judul: string;
+  subjudul?: string;
+  deskripsi?: string;
+  gambar: string;
+  tombolText?: string;
+  tombolUrl?: string;
+  urutan: number;
+  aktif: boolean;
+  dibuat: string;
+  diperbarui: string;
+}
+
+interface ProfileDesaData {
+  id: string;
+  judul: string;
+  konten: string;
+  gambar?: string;
+  urutan: number;
+  section: string;
+  visi?: string;
+  misi?: unknown;
+  aktif: boolean;
+  dibuat: string;
+  diperbarui: string;
+}
+
+interface GalleryData {
+  id: string;
+  judul: string;
+  deskripsi?: string;
+  gambar: string;
+  kategori: string;
+  tags?: unknown;
+  urutan: number;
+  tampilHome: boolean;
+  dibuat: string;
+  diperbarui: string;
+}
+
+interface FAQData {
+  id: string;
+  pertanyaan: string;
+  jawaban: string;
+  kategori?: string;
+  urutan: number;
+  aktif: boolean;
+  dibuat: string;
+  diperbarui: string;
+}
+
+interface SliderData {
+  id: string;
+  judul: string;
+  konten?: string;
+  gambar?: string;
+  link?: string;
+  tipe: string;
+  urutan: number;
+  aktif: boolean;
+  tanggalMulai?: string;
+  tanggalSelesai?: string;
+  dibuat: string;
+  diperbarui: string;
+}
+
+interface PengaduanData {
+  id: string;
+  nama: string;
+  email?: string;
+  telepon?: string;
+  subjek: string;
+  pesan: string;
+  kategori: string;
+  status: string;
+  prioritas: string;
+  tanggapan?: string;
+  ditanggapiOleh?: string;
+  tanggalTanggap?: string;
+  dibuat: string;
+  diperbarui: string;
+}
+
+interface DokumenPublikData {
+  id: string;
+  judul: string;
+  deskripsi?: string;
+  namaFile: string;
+  urlFile: string;
+  ukuranFile?: number;
+  kategori: string;
+  tahun?: number;
+  nomorDokumen?: string;
+  tanggalTerbit?: string;
+  jumlahUnduhan: number;
+  aktif: boolean;
+  dibuat: string;
+  diperbarui: string;
+}
+
+interface PotensiDesaData {
+  id: string;
+  judul: string;
+  deskripsi: string;
+  kategori: string;
+  gambar?: string;
+  lokasi?: string;
+  kontak?: string;
+  urutan: number;
+  aktif: boolean;
+  dibuat: string;
+  diperbarui: string;
+}
+
 interface User {
   id: string;
   username: string;
@@ -298,6 +413,358 @@ class ApiClient {
       method: "PUT",
       headers: this.getHeaders(true),
       body: JSON.stringify(data),
+    });
+  }
+
+  // Hero Section
+  async getHeroSection(params?: {
+    aktif?: boolean;
+    search?: string;
+  }): Promise<ApiResponse<HeroSectionData[]>> {
+    const query = new URLSearchParams();
+    if (params?.aktif !== undefined)
+      query.append("aktif", String(params.aktif));
+    if (params?.search) query.append("search", params.search);
+    return this.request<HeroSectionData[]>(`/hero-section?${query}`);
+  }
+
+  async getHeroSectionById(id: string): Promise<ApiResponse<HeroSectionData>> {
+    return this.request<HeroSectionData>(`/hero-section/${id}`);
+  }
+
+  async createHeroSection(
+    data: Partial<HeroSectionData>,
+  ): Promise<ApiResponse<HeroSectionData>> {
+    return this.request<HeroSectionData>("/hero-section", {
+      method: "POST",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateHeroSection(
+    id: string,
+    data: Partial<HeroSectionData>,
+  ): Promise<ApiResponse<HeroSectionData>> {
+    return this.request<HeroSectionData>(`/hero-section/${id}`, {
+      method: "PUT",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteHeroSection(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/hero-section/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(true),
+    });
+  }
+
+  // Profile Desa
+  async getProfileDesa(params?: {
+    section?: string;
+    aktif?: boolean;
+  }): Promise<ApiResponse<ProfileDesaData[]>> {
+    const query = new URLSearchParams();
+    if (params?.section) query.append("section", params.section);
+    if (params?.aktif !== undefined)
+      query.append("aktif", String(params.aktif));
+    return this.request<ProfileDesaData[]>(`/profil-desa?${query}`);
+  }
+
+  async getProfileDesaById(id: string): Promise<ApiResponse<ProfileDesaData>> {
+    return this.request<ProfileDesaData>(`/profil-desa/${id}`);
+  }
+
+  async createProfileDesa(
+    data: Partial<ProfileDesaData>,
+  ): Promise<ApiResponse<ProfileDesaData>> {
+    return this.request<ProfileDesaData>("/profil-desa", {
+      method: "POST",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateProfileDesa(
+    id: string,
+    data: Partial<ProfileDesaData>,
+  ): Promise<ApiResponse<ProfileDesaData>> {
+    return this.request<ProfileDesaData>(`/profil-desa/${id}`, {
+      method: "PUT",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteProfileDesa(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/profil-desa/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(true),
+    });
+  }
+
+  // Gallery
+  async getGallery(params?: {
+    kategori?: string;
+    tampilHome?: boolean;
+  }): Promise<ApiResponse<GalleryData[]>> {
+    const query = new URLSearchParams();
+    if (params?.kategori) query.append("kategori", params.kategori);
+    if (params?.tampilHome !== undefined)
+      query.append("tampilHome", String(params.tampilHome));
+    return this.request<GalleryData[]>(`/gallery?${query}`);
+  }
+
+  async getGalleryById(id: string): Promise<ApiResponse<GalleryData>> {
+    return this.request<GalleryData>(`/gallery/${id}`);
+  }
+
+  async createGallery(
+    data: Partial<GalleryData>,
+  ): Promise<ApiResponse<GalleryData>> {
+    return this.request<GalleryData>("/gallery", {
+      method: "POST",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateGallery(
+    id: string,
+    data: Partial<GalleryData>,
+  ): Promise<ApiResponse<GalleryData>> {
+    return this.request<GalleryData>(`/gallery/${id}`, {
+      method: "PUT",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteGallery(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/gallery/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(true),
+    });
+  }
+
+  // FAQ
+  async getFAQ(params?: {
+    kategori?: string;
+    aktif?: boolean;
+  }): Promise<ApiResponse<FAQData[]>> {
+    const query = new URLSearchParams();
+    if (params?.kategori) query.append("kategori", params.kategori);
+    if (params?.aktif !== undefined)
+      query.append("aktif", String(params.aktif));
+    return this.request<FAQData[]>(`/faq?${query}`);
+  }
+
+  async getFAQById(id: string): Promise<ApiResponse<FAQData>> {
+    return this.request<FAQData>(`/faq/${id}`);
+  }
+
+  async createFAQ(data: Partial<FAQData>): Promise<ApiResponse<FAQData>> {
+    return this.request<FAQData>("/faq", {
+      method: "POST",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateFAQ(
+    id: string,
+    data: Partial<FAQData>,
+  ): Promise<ApiResponse<FAQData>> {
+    return this.request<FAQData>(`/faq/${id}`, {
+      method: "PUT",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteFAQ(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/faq/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(true),
+    });
+  }
+
+  // Slider
+  async getSlider(params?: {
+    aktif?: boolean;
+    tipe?: string;
+  }): Promise<ApiResponse<SliderData[]>> {
+    const query = new URLSearchParams();
+    if (params?.aktif !== undefined)
+      query.append("aktif", String(params.aktif));
+    if (params?.tipe) query.append("tipe", params.tipe);
+    return this.request<SliderData[]>(`/slider?${query}`);
+  }
+
+  async getSliderById(id: string): Promise<ApiResponse<SliderData>> {
+    return this.request<SliderData>(`/slider/${id}`);
+  }
+
+  async createSlider(
+    data: Partial<SliderData>,
+  ): Promise<ApiResponse<SliderData>> {
+    return this.request<SliderData>("/slider", {
+      method: "POST",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateSlider(
+    id: string,
+    data: Partial<SliderData>,
+  ): Promise<ApiResponse<SliderData>> {
+    return this.request<SliderData>(`/slider/${id}`, {
+      method: "PUT",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteSlider(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/slider/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(true),
+    });
+  }
+
+  // Pengaduan
+  async getPengaduan(params?: {
+    status?: string;
+    kategori?: string;
+    prioritas?: string;
+  }): Promise<ApiResponse<PengaduanData[]>> {
+    const query = new URLSearchParams();
+    if (params?.status) query.append("status", params.status);
+    if (params?.kategori) query.append("kategori", params.kategori);
+    if (params?.prioritas) query.append("prioritas", params.prioritas);
+    return this.request<PengaduanData[]>(`/pengaduan?${query}`);
+  }
+
+  async getPengaduanById(id: string): Promise<ApiResponse<PengaduanData>> {
+    return this.request<PengaduanData>(`/pengaduan/${id}`);
+  }
+
+  async createPengaduan(
+    data: Partial<PengaduanData>,
+  ): Promise<ApiResponse<PengaduanData>> {
+    return this.request<PengaduanData>("/pengaduan", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updatePengaduan(
+    id: string,
+    data: Partial<PengaduanData>,
+  ): Promise<ApiResponse<PengaduanData>> {
+    return this.request<PengaduanData>(`/pengaduan/${id}`, {
+      method: "PUT",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deletePengaduan(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/pengaduan/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(true),
+    });
+  }
+
+  // Dokumen Publik
+  async getDokumen(params?: {
+    kategori?: string;
+    tahun?: number;
+    aktif?: boolean;
+  }): Promise<ApiResponse<DokumenPublikData[]>> {
+    const query = new URLSearchParams();
+    if (params?.kategori) query.append("kategori", params.kategori);
+    if (params?.tahun) query.append("tahun", String(params.tahun));
+    if (params?.aktif !== undefined)
+      query.append("aktif", String(params.aktif));
+    return this.request<DokumenPublikData[]>(`/dokumen?${query}`);
+  }
+
+  async getDokumenById(id: string): Promise<ApiResponse<DokumenPublikData>> {
+    return this.request<DokumenPublikData>(`/dokumen/${id}`);
+  }
+
+  async createDokumen(
+    data: Partial<DokumenPublikData>,
+  ): Promise<ApiResponse<DokumenPublikData>> {
+    return this.request<DokumenPublikData>("/dokumen", {
+      method: "POST",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateDokumen(
+    id: string,
+    data: Partial<DokumenPublikData>,
+  ): Promise<ApiResponse<DokumenPublikData>> {
+    return this.request<DokumenPublikData>(`/dokumen/${id}`, {
+      method: "PUT",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteDokumen(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/dokumen/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(true),
+    });
+  }
+
+  // Potensi Desa
+  async getPotensiDesa(params?: {
+    kategori?: string;
+    aktif?: boolean;
+  }): Promise<ApiResponse<PotensiDesaData[]>> {
+    const query = new URLSearchParams();
+    if (params?.kategori) query.append("kategori", params.kategori);
+    if (params?.aktif !== undefined)
+      query.append("aktif", String(params.aktif));
+    return this.request<PotensiDesaData[]>(`/potensi-desa?${query}`);
+  }
+
+  async getPotensiDesaById(id: string): Promise<ApiResponse<PotensiDesaData>> {
+    return this.request<PotensiDesaData>(`/potensi-desa/${id}`);
+  }
+
+  async createPotensiDesa(
+    data: Partial<PotensiDesaData>,
+  ): Promise<ApiResponse<PotensiDesaData>> {
+    return this.request<PotensiDesaData>("/potensi-desa", {
+      method: "POST",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updatePotensiDesa(
+    id: string,
+    data: Partial<PotensiDesaData>,
+  ): Promise<ApiResponse<PotensiDesaData>> {
+    return this.request<PotensiDesaData>(`/potensi-desa/${id}`, {
+      method: "PUT",
+      headers: this.getHeaders(true),
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deletePotensiDesa(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/potensi-desa/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(true),
     });
   }
 
@@ -512,6 +979,14 @@ export type {
   PerangkatData,
   LayananData,
   PertanggungjawabanData,
+  HeroSectionData,
+  ProfileDesaData,
+  GalleryData,
+  FAQData,
+  SliderData,
+  PengaduanData,
+  DokumenPublikData,
+  PotensiDesaData,
   User,
   LoginResponse,
   MeResponse,
