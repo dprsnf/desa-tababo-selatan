@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
+import { writeFile, mkdir, unlink } from "fs/promises";
 import { existsSync } from "fs";
 import path from "path";
 import sharp from "sharp";
@@ -20,10 +20,7 @@ export async function POST(request: NextRequest) {
     const file = formData.get("file") as File;
 
     if (!file) {
-      return NextResponse.json(
-        { error: "No file uploaded" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
     // Validate file type
@@ -32,7 +29,7 @@ export async function POST(request: NextRequest) {
         {
           error: "Invalid file type. Only JPEG, PNG, and WebP are allowed.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -40,7 +37,7 @@ export async function POST(request: NextRequest) {
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: "File size too large. Maximum size is 5MB." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -75,7 +72,7 @@ export async function POST(request: NextRequest) {
       console.error("Error processing image:", error);
       return NextResponse.json(
         { error: "Failed to process image" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -118,7 +115,7 @@ export async function POST(request: NextRequest) {
     console.error("Upload error:", error);
     return NextResponse.json(
       { error: "Failed to upload file" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -133,7 +130,7 @@ export async function DELETE(request: NextRequest) {
     if (!filename) {
       return NextResponse.json(
         { error: "Filename is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -145,14 +142,12 @@ export async function DELETE(request: NextRequest) {
     const filepath = path.join(uploadsDir, filename);
     const thumbnailPath = path.join(uploadsDir, `thumb-${filename}`);
 
-    const fs = require("fs").promises;
-
     if (existsSync(filepath)) {
-      await fs.unlink(filepath);
+      await unlink(filepath);
     }
 
     if (existsSync(thumbnailPath)) {
-      await fs.unlink(thumbnailPath);
+      await unlink(thumbnailPath);
     }
 
     return NextResponse.json({
@@ -167,7 +162,7 @@ export async function DELETE(request: NextRequest) {
     console.error("Delete error:", error);
     return NextResponse.json(
       { error: "Failed to delete file" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
