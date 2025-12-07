@@ -112,7 +112,7 @@ function EditBeranda() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
         <AdminNavbar onLogout={logout} />
         <div className="container mx-auto px-4 py-12">
           <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
@@ -125,7 +125,7 @@ function EditBeranda() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
       <AdminNavbar onLogout={logout} />
 
       {/* Header */}
@@ -422,7 +422,7 @@ function EditBeranda() {
             </div>
 
             {/* Help */}
-            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl shadow-lg p-6 border border-blue-200">
+            <div className="bg-linear-to-br from-blue-50 to-cyan-50 rounded-2xl shadow-lg p-6 border border-blue-200">
               <h3 className="font-bold text-gray-800 mb-2">💡 Tips</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Pastikan semua informasi sudah benar sebelum menyimpan. Klik

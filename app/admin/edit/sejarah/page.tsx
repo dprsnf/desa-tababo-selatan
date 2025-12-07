@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import { FaSave, FaEye, FaPlus, FaTrash } from "react-icons/fa";
 import Link from "next/link";
-import { withAuth } from "@/contexts/AuthContext";
+import { withAuth, useAuth } from "@/contexts/AuthContext";
+import AdminNavbar from "@/components/AdminNavbar";
 
 function EditSejarah() {
+  const { logout } = useAuth();
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -101,17 +103,23 @@ function EditSejarah() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50 p-6 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Memuat data sejarah...</p>
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
+        <AdminNavbar onLogout={logout} />
+        <div className="container mx-auto p-6">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Memuat data sejarah...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50 p-6">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
+      <AdminNavbar onLogout={logout} />
+      
+      <div className="container mx-auto p-6">
       <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
         <div className="flex items-center justify-between">
           <div>
@@ -313,7 +321,7 @@ function EditSejarah() {
                           newData[index].emoji = e.target.value;
                           setFormData({ ...formData, budaya: newData });
                         }}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-center text-2xl text-gray-900"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-center text-gray-900"
                       />
                     </div>
                     <div className="col-span-3">
@@ -453,6 +461,7 @@ function EditSejarah() {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

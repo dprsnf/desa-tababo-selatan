@@ -4,11 +4,30 @@ import { useState, useEffect } from "react";
 import { FaBook, FaClock, FaPalette, FaStar } from "react-icons/fa";
 import { GiVillage } from "react-icons/gi";
 
+interface TimelineItem {
+  tahun: string;
+  peristiwa: string;
+}
+
+interface BudayaItem {
+  nama: string;
+  emoji: string;
+  deskripsi: string;
+}
+
+interface TokohItem {
+  nama: string;
+  peran: string;
+  periode: string;
+}
+
 interface SejarahData {
-  judul: string;
-  konten: string;
-  visiMisi?: string;
-  [key: string]: any;
+  judulUtama: string;
+  deskripsiHero: string;
+  asalUsul: string;
+  timeline: TimelineItem[];
+  budaya: BudayaItem[];
+  tokohPenting: TokohItem[];
 }
 
 export default function SejarahDesa() {
@@ -38,7 +57,7 @@ export default function SejarahDesa() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-emerald-50">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-green-50 to-emerald-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-green-700 text-lg">Memuat...</p>
@@ -48,29 +67,33 @@ export default function SejarahDesa() {
   }
 
   // Default content if no data
-  const judul = data?.judul || "Sejarah Desa Tababo Selatan";
-  const konten = data?.konten || "Informasi sejarah desa belum tersedia.";
+  const judulUtama = data?.judulUtama || "Sejarah Desa Tababo Selatan";
+  const deskripsiHero = data?.deskripsiHero || "Desa yang Kaya Akan Sejarah dan Budaya";
+  const asalUsul = data?.asalUsul || "Informasi sejarah desa belum tersedia.";
+  const timeline = data?.timeline || [];
+  const budaya = data?.budaya || [];
+  const tokohPenting = data?.tokohPenting || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 via-emerald-50 to-green-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-linear-to-b from-green-50 via-emerald-50 to-green-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <FaBook className="text-6xl text-green-600 mx-auto mb-4" />
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            {judul}
+            {judulUtama}
           </h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-600 mx-auto rounded-full mb-4"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-600 mx-auto rounded-full mb-4"></div>
           <p className="text-lg text-gray-600">
             Perjalanan dan Perkembangan Desa dari Masa ke Masa
           </p>
         </div>
 
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-700 rounded-2xl shadow-2xl p-8 md:p-12 mb-12 text-white">
+        <div className="bg-linear-to-r from-green-600 via-emerald-600 to-teal-700 rounded-2xl shadow-2xl p-8 md:p-12 mb-12 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <GiVillage className="text-6xl mx-auto mb-4" />
             <h2 className="text-3xl font-bold mb-4">
-              Desa yang Kaya Akan Sejarah dan Budaya
+              {deskripsiHero}
             </h2>
             <p className="text-lg opacity-90">
               Desa Tababo Selatan memiliki perjalanan panjang yang penuh dengan
@@ -84,12 +107,12 @@ export default function SejarahDesa() {
           {/* Konten Utama */}
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-green-100 hover:shadow-2xl transition-shadow duration-300">
             <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="shrink-0 w-16 h-16 bg-linear-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
                 <FaBook className="text-3xl text-white" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Sejarah Desa
+                  Asal Usul dan Sejarah Desa
                 </h2>
                 <div className="h-1 w-20 bg-green-600 rounded"></div>
               </div>
@@ -97,39 +120,16 @@ export default function SejarahDesa() {
             <div
               className="text-gray-700 leading-relaxed prose prose-lg max-w-none"
               dangerouslySetInnerHTML={{
-                __html: konten.replace(/\n/g, "<br />"),
+                __html: asalUsul.replace(/\n/g, "<br />"),
               }}
             />
           </div>
 
-          {/* Visi Misi (if available) */}
-          {data?.visiMisi && (
-            <div className="bg-white rounded-2xl shadow-xl p-8 border border-green-100">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <FaStar className="text-3xl text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                    Visi & Misi
-                  </h2>
-                  <div className="h-1 w-20 bg-emerald-600 rounded"></div>
-                </div>
-              </div>
-              <div
-                className="text-gray-700 leading-relaxed prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{
-                  __html: data.visiMisi.replace(/\n/g, "<br />"),
-                }}
-              />
-            </div>
-          )}
-
           {/* Timeline (if data includes timeline) */}
-          {data?.timeline && Array.isArray(data.timeline) && (
+          {timeline.length > 0 && (
             <div className="bg-white rounded-2xl shadow-xl p-8 border border-green-100">
               <div className="flex items-start gap-4 mb-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="shrink-0 w-16 h-16 bg-linear-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
                   <FaClock className="text-3xl text-white" />
                 </div>
                 <div>
@@ -141,26 +141,28 @@ export default function SejarahDesa() {
               </div>
 
               <div className="space-y-6">
-                {data.timeline.map((item: any, index: number) => {
-                  const colors = ["green", "emerald", "teal", "lime"];
-                  const color = colors[index % colors.length];
+                {timeline.map((item, index) => {
+                  const colorClasses = [
+                    { border: "border-green-600", bg: "bg-green-50", gradient: "from-green-500 to-green-600" },
+                    { border: "border-emerald-600", bg: "bg-emerald-50", gradient: "from-emerald-500 to-emerald-600" },
+                    { border: "border-teal-600", bg: "bg-teal-50", gradient: "from-teal-500 to-teal-600" },
+                    { border: "border-lime-600", bg: "bg-lime-50", gradient: "from-lime-500 to-lime-600" },
+                  ];
+                  const colors = colorClasses[index % colorClasses.length];
                   return (
                     <div
                       key={index}
-                      className={`border-l-4 border-${color}-600 pl-6 py-3 bg-${color}-50 rounded-r-lg hover:shadow-md transition-shadow`}
+                      className={`border-l-4 ${colors.border} pl-6 py-3 ${colors.bg} rounded-r-lg hover:shadow-md transition-shadow`}
                     >
                       <div className="flex items-center gap-3 mb-2">
                         <span
-                          className={`bg-gradient-to-r from-${color}-500 to-${color}-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-md`}
+                          className={`bg-linear-to-r ${colors.gradient} text-white text-sm font-bold px-4 py-2 rounded-full shadow-md`}
                         >
-                          {item.tahun || item.year}
+                          {item.tahun}
                         </span>
-                        <h3 className="text-xl font-bold text-gray-900">
-                          {item.judul || item.title}
-                        </h3>
                       </div>
-                      <p className="text-gray-700">
-                        {item.deskripsi || item.desc}
+                      <p className="text-gray-700 font-semibold">
+                        {item.peristiwa}
                       </p>
                     </div>
                   );
@@ -170,10 +172,10 @@ export default function SejarahDesa() {
           )}
 
           {/* Budaya dan Tradisi (if available) */}
-          {data?.budaya && Array.isArray(data.budaya) && (
+          {budaya.length > 0 && (
             <div className="bg-white rounded-2xl shadow-xl p-8 border border-green-100">
               <div className="flex items-start gap-4 mb-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="shrink-0 w-16 h-16 bg-linear-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
                   <FaPalette className="text-3xl text-white" />
                 </div>
                 <div>
@@ -188,17 +190,17 @@ export default function SejarahDesa() {
                 tradisi yang masih terjaga hingga saat ini.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {data.budaya.map((item: any, index: number) => (
+                {budaya.map((item, index) => (
                   <div
                     key={index}
-                    className="border-2 border-green-200 rounded-xl p-6 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                    className="border-2 border-green-200 rounded-xl p-6 bg-linear-to-br from-green-50 to-emerald-50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                   >
-                    <div className="text-4xl mb-3">{item.icon || "🎨"}</div>
+                    <div className="text-4xl mb-3">{item.emoji}</div>
                     <h4 className="font-bold text-lg text-gray-900 mb-3">
-                      {item.judul || item.title}
+                      {item.nama}
                     </h4>
                     <p className="text-gray-700">
-                      {item.deskripsi || item.desc}
+                      {item.deskripsi}
                     </p>
                   </div>
                 ))}
@@ -207,10 +209,10 @@ export default function SejarahDesa() {
           )}
 
           {/* Tokoh Penting (if available) */}
-          {data?.tokoh && Array.isArray(data.tokoh) && (
+          {tokohPenting.length > 0 && (
             <div className="bg-white rounded-2xl shadow-xl p-8 border border-green-100">
               <div className="flex items-start gap-4 mb-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="shrink-0 w-16 h-16 bg-linear-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
                   <FaStar className="text-3xl text-white" />
                 </div>
                 <div>
@@ -225,10 +227,10 @@ export default function SejarahDesa() {
                 melahirkan berbagai tokoh penting.
               </p>
               <div className="space-y-4">
-                {data.tokoh.map((item: any, index: number) => (
+                {tokohPenting.map((item, index) => (
                   <div
                     key={index}
-                    className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-6 border-l-4 border-amber-500 shadow-md hover:shadow-lg transition-shadow"
+                    className="bg-linear-to-r from-amber-50 to-orange-50 rounded-xl p-6 border-l-4 border-amber-500 shadow-md hover:shadow-lg transition-shadow"
                   >
                     <h4 className="font-bold text-lg text-gray-900 mb-2">
                       {item.nama}
@@ -236,7 +238,6 @@ export default function SejarahDesa() {
                     <p className="text-gray-600 mb-2 text-sm">
                       {item.peran} - {item.periode}
                     </p>
-                    <p className="text-gray-700">{item.deskripsi}</p>
                   </div>
                 ))}
               </div>

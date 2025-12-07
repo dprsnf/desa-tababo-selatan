@@ -95,7 +95,7 @@ function ProgramPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
       <AdminNavbar onLogout={logout} />
 
       <div className="container mx-auto px-4 py-8">
@@ -113,7 +113,7 @@ function ProgramPage() {
             </div>
             <Link
               href="/admin/program/create"
-              className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-xl"
+              className="flex items-center gap-2 bg-linear-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-xl"
             >
               <FaPlus />
               Tambah Program

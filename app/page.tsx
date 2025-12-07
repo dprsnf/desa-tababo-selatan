@@ -9,9 +9,10 @@ import {
   FaChartLine,
   FaNewspaper,
   FaBuilding,
+  FaQuestionCircle,
 } from "react-icons/fa";
 import { GiVillage, GiFarmer } from "react-icons/gi";
-import { MdLocationOn } from "react-icons/md";
+import { MdLocationOn, MdAccountBalance, MdHistory, MdStars } from "react-icons/md";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -20,6 +21,7 @@ import StatCard from "@/components/StatCard";
 import FeatureCard from "@/components/FeatureCard";
 import NewsCard from "@/components/NewsCard";
 import SectionTitle from "@/components/SectionTitle";
+import MapSection from "@/components/MapSection";
 
 interface HeroData {
   judul: string;
@@ -44,11 +46,21 @@ interface SliderData {
   dibuat: string;
 }
 
+interface Berita {
+  id: string;
+  judul: string;
+  slug: string;
+  ringkasan: string;
+  gambarUtama: string | null;
+  kategori: string;
+  dibuat: string;
+}
+
 export default function Home() {
   const [hero, setHero] = useState<HeroData>({
     judul: "Desa Tababo Selatan",
     subjudul: "Desa Hijau, Sejahtera, dan Mandiri",
-    deskripsi: "Kecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]",
+    deskripsi: "Kecamatan Belang, Kabupaten Minahasa Tenggara",
     gambar: "",
   });
 
@@ -60,6 +72,7 @@ export default function Home() {
   ]);
 
   const [sliders, setSliders] = useState<SliderData[]>([]);
+  const [beritaList, setBeritaList] = useState<Berita[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -103,6 +116,15 @@ export default function Home() {
             setSliders(sliderData.data);
           }
         }
+
+        // Fetch berita terbaru (terbit & limit 6)
+        const beritaRes = await fetch("/api/berita?terbit=true&limit=6");
+        if (beritaRes.ok) {
+          const beritaData = await beritaRes.json();
+          if (beritaData.success && beritaData.data) {
+            setBeritaList(beritaData.data);
+          }
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -115,86 +137,67 @@ export default function Home() {
 
   const features = [
     {
-      icon: <GiVillage className="text-5xl" />,
-      title: "Struktur Organisasi",
-      description: "Pemerintahan desa yang transparan dan akuntabel",
+      icon: <FaUsers className="text-5xl" />,
+      title: "Struktur Pemerintahan",
+      description: "Susunan pemerintahan dan perangkat desa",
       link: "/struktur-organisasi",
       color: "from-emerald-500 to-green-600",
     },
     {
-      icon: <FaChartLine className="text-5xl" />,
+      icon: <MdAccountBalance className="text-5xl" />,
       title: "Pertanggungjawaban",
-      description: "Laporan keuangan dan program desa",
+      description: "Laporan keuangan dan realisasi program",
       link: "/pertanggungjawaban",
       color: "from-green-500 to-teal-600",
     },
     {
-      icon: <FaUsers className="text-5xl" />,
-      title: "Kepala Desa Sebelumnya",
-      description: "Sejarah kepemimpinan desa",
-      link: "/kepala-desa-sebelumnya",
-      color: "from-teal-500 to-cyan-600",
-    },
-    {
       icon: <FaNewspaper className="text-5xl" />,
-      title: "Sejarah Desa",
-      description: "Perjalanan dan perkembangan desa",
-      link: "/sejarah",
-      color: "from-lime-500 to-green-600",
+      title: "Berita & Kegiatan",
+      description: "Informasi dan kegiatan terkini desa",
+      link: "/berita",
+      color: "from-blue-500 to-indigo-600",
     },
     {
-      icon: <FaLeaf className="text-5xl" />,
+      icon: <MdHistory className="text-5xl" />,
+      title: "Sejarah Desa",
+      description: "Perjalanan dan perkembangan Desa Tababo Selatan",
+      link: "/sejarah",
+      color: "from-amber-500 to-orange-600",
+    },
+    {
+      icon: <MdStars className="text-5xl" />,
       title: "Keunggulan Desa",
-      description: "Potensi dan keunggulan lokal",
+      description: "Potensi unggulan dan sumber daya lokal",
       link: "/keunggulan",
       color: "from-green-600 to-emerald-700",
     },
-  ];
-
-  // Default news if no sliders
-  const defaultNews = [
     {
-      title: "Program Pembangunan Infrastruktur 2024",
-      date: "15 November 2024",
-      image:
-        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-      link: null,
-    },
-    {
-      title: "Pelatihan UMKM Desa Sukses Digelar",
-      date: "10 November 2024",
-      image:
-        "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=800&q=80",
-      link: null,
-    },
-    {
-      title: "Panen Raya Padi Tahun Ini Meningkat",
-      date: "5 November 2024",
-      image:
-        "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&q=80",
-      link: null,
+      icon: <FaQuestionCircle className="text-5xl" />,
+      title: "FAQ",
+      description: "Pertanyaan yang sering diajukan",
+      link: "/faq",
+      color: "from-purple-500 to-pink-600",
     },
   ];
 
-  const newsItems =
-    sliders.length > 0
-      ? sliders.map((slider) => ({
-          title: slider.judul,
-          date: new Date(slider.dibuat).toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          }),
-          image:
-            slider.gambar ||
-            "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-          link: slider.link,
-        }))
-      : defaultNews;
+  // Format berita untuk NewsCard
+  const newsItems = beritaList.map((berita) => ({
+    title: berita.judul,
+    date: new Date(berita.dibuat).toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }),
+    image:
+      berita.gambarUtama ||
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
+    link: `/berita/${berita.slug}`,
+    excerpt: berita.ringkasan,
+  }));
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-emerald-50">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-green-50 to-emerald-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-green-700 text-lg">Memuat...</p>
@@ -204,9 +207,9 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-gradient-to-b from-green-50 to-emerald-50">
+    <div className="bg-linear-to-b from-green-50 to-emerald-50">
       {/* Hero Section */}
-      <section className="relative min-h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden bg-gradient-to-br from-green-800 via-emerald-700 to-teal-800">
+      <section className="relative min-h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden bg-linear-to-br from-green-800 via-emerald-700 to-teal-800">
         {hero.gambar && (
           <div
             className="absolute inset-0 bg-cover bg-center opacity-20"
@@ -317,7 +320,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-b from-green-50 to-white">
+      <section className="py-20 bg-linear-to-b from-green-50 to-white">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -350,7 +353,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* News Carousel Section */}
+      {/* News Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
@@ -363,29 +366,42 @@ export default function Home() {
           </motion.div>
 
           {newsItems.length > 0 ? (
-            <Swiper
-              modules={[Autoplay, Pagination]}
-              spaceBetween={30}
-              slidesPerView={1}
-              breakpoints={{
-                640: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-              }}
-              autoplay={{ delay: 3000, disableOnInteraction: false }}
-              pagination={{ clickable: true }}
-              className="pb-12"
-            >
-              {newsItems.map((item, index) => (
-                <SwiperSlide key={index}>
-                  <NewsCard
-                    title={item.title}
-                    date={item.date}
-                    image={item.image}
-                    link={item.link}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <>
+              <Swiper
+                modules={[Autoplay, Pagination]}
+                spaceBetween={30}
+                slidesPerView={1}
+                breakpoints={{
+                  640: { slidesPerView: 2 },
+                  1024: { slidesPerView: 3 },
+                }}
+                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                pagination={{ clickable: true }}
+                className="pb-12"
+              >
+                {newsItems.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <NewsCard
+                      title={item.title}
+                      date={item.date}
+                      image={item.image}
+                      link={item.link}
+                      excerpt={item.excerpt}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+              <div className="text-center mt-8">
+                <Link
+                  href="/berita"
+                  className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition-all transform hover:scale-105"
+                >
+                  <FaNewspaper />
+                  Lihat Semua Berita
+                </Link>
+              </div>
+            </>
           ) : (
             <div className="text-center py-12 text-gray-500">
               <FaNewspaper className="text-5xl mx-auto mb-4 opacity-30" />
@@ -395,8 +411,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Map Section */}
+      <MapSection
+        latitude={0.9629460591112564}
+        longitude={124.80253311393106}
+        desaNama="Desa Tababo Selatan"
+        alamat="Kecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten], Provinsi Gorontalo"
+      />
+
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-green-700 via-emerald-600 to-teal-700 text-white relative overflow-hidden">
+      <section className="py-20 bg-linear-to-br from-green-700 via-emerald-600 to-teal-700 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzBoLTZWMjRoNnYtem0wIDZoLTZWMzBoNnYxOHptNiAwaDZ2LTZoLTZ2Nm0wLTEyaDZ2LTZoLTZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -421,12 +445,6 @@ export default function Home() {
               >
                 Lihat Program Desa
               </Link>
-              <a
-                href="#"
-                className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-green-700 transition-all transform hover:scale-105"
-              >
-                Hubungi Kami
-              </a>
             </div>
           </motion.div>
         </div>

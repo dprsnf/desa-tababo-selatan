@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient, PertanggungjawabanData } from "@/lib/api-client";
+import AdminNavbar from "@/components/AdminNavbar";
 
 export default function PertanggungjawabanPage() {
   const router = useRouter();
@@ -83,10 +84,12 @@ export default function PertanggungjawabanPage() {
   const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-linear-to-br from-amber-50 to-orange-100">
+      <AdminNavbar onLogout={logout} />
+      
+      <div className="container mx-auto p-4 sm:p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="mb-6 flex justify-between items-start">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               Pertanggungjawaban
@@ -95,20 +98,12 @@ export default function PertanggungjawabanPage() {
               Kelola laporan pertanggungjawaban keuangan desa
             </p>
           </div>
-          <div className="flex gap-2">
-            <Link
-              href="/admin"
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              ← Dashboard
-            </Link>
-            <button
-              onClick={logout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-            >
-              Logout
-            </button>
-          </div>
+          <Link
+            href="/admin/pertanggungjawaban/dokumen"
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium shadow-lg"
+          >
+            📄 Kelola Dokumen
+          </Link>
         </div>
 
         {/* Search & Filter */}
@@ -280,7 +275,7 @@ export default function PertanggungjawabanPage() {
                     <button
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                       disabled={page === 1}
-                      className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900"
+                      className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900"
                     >
                       Sebelumnya
                     </button>
@@ -289,7 +284,7 @@ export default function PertanggungjawabanPage() {
                         setPage((p) => Math.min(totalPages, p + 1))
                       }
                       disabled={page === totalPages}
-                      className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900"
+                      className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900">
                     >
                       Selanjutnya
                     </button>

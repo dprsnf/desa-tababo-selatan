@@ -2,37 +2,93 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
 
-// GET - Load struktur organisasi data
+// GET - Load struktur pemerintahan data dari database
 export async function GET() {
   try {
-    // Load from ProfileDesa table with section="struktur_organisasi"
-    const existing = await prisma.profileDesa.findFirst({
-      where: { section: "struktur_organisasi" },
+    // Load perangkat desa yang sedang menjabat
+    const perangkatDesa = await prisma.kepalaDesaPerangkat.findMany({
+      where: { sedangMenjabat: true },
+      orderBy: { urutan: "asc" },
     });
 
-    if (existing && existing.konten) {
-      // Parse JSON from konten field
-      const strukturData = JSON.parse(existing.konten);
+    // Load kepala desa sebelumnya (yang tidak sedang menjabat)
+    const kepalaDesaSebelumnya = await prisma.kepalaDesaPerangkat.findMany({
+      where: {
+        jabatan: "kepala_desa",
+        sedangMenjabat: false,
+      },
+      orderBy: { tahunSelesai: "desc" },
+    });
 
-      return NextResponse.json({
-        success: true,
-        data: strukturData,
-      });
-    }
+    // Pisahkan berdasarkan jabatan (case-insensitive dan fleksibel)
+    const kepala_desa = perangkatDesa.find((p) => 
+      p.jabatan.toLowerCase().replace(/\s+/g, '_') === "kepala_desa" ||
+      p.jabatan.toLowerCase().includes("kepala desa")
+    );
+    const sekretaris = perangkatDesa.find((p) => 
+      p.jabatan.toLowerCase().replace(/\s+/g, '_') === "sekretaris" ||
+      p.jabatan.toLowerCase().includes("sekretaris")
+    );
+    
+    const kaur = perangkatDesa.filter((p) => 
+      p.jabatan.toLowerCase().includes("kaur") || 
+      p.jabatan.toLowerCase().includes("kepala urusan")
+    );
+    
+    const kasi = perangkatDesa.filter((p) => 
+      p.jabatan.toLowerCase().includes("kasi") || 
+      p.jabatan.toLowerCase().includes("kepala seksi")
+    );
+    
+    const kepala_dusun = perangkatDesa.filter((p) => 
+      p.jabatan.toLowerCase().includes("kepala dusun") ||
+      p.jabatan === "kepala_dusun"
+    );
 
-    // Return default structure if not found
+    const perangkat_lain = perangkatDesa.filter((p) => 
+      p.jabatan !== "kepala_desa" && 
+      p.jabatan !== "sekretaris" &&
+      !p.jabatan.toLowerCase().includes("kaur") &&
+      !p.jabatan.toLowerCase().includes("kepala urusan") &&
+      !p.jabatan.toLowerCase().includes("kasi") &&
+      !p.jabatan.toLowerCase().includes("kepala seksi") &&
+      !p.jabatan.toLowerCase().includes("kepala dusun")
+    );
+
+    // Format data untuk frontend
+    const formatPerangkat = (p: any) => ({
+      id: p.id,
+      nama: p.namaLengkap,
+      jabatan: p.jabatan,
+      nip: p.nip,
+      foto: p.foto,
+      kontak: null, // Field kontak tidak ada di schema, bisa ditambahkan jika perlu
+    });
+
+    // Format kepala desa sebelumnya
+    const kepalaDesaSebelumnyaFormatted = kepalaDesaSebelumnya.map((kd) => ({
+      id: kd.id,
+      nama: kd.namaLengkap,
+      periode_mulai: kd.tahunMulai ? `${kd.tahunMulai}-01-01` : new Date().toISOString(),
+      periode_selesai: kd.tahunSelesai ? `${kd.tahunSelesai}-12-31` : null,
+      foto: kd.foto,
+      deskripsi: kd.prestasi || null,
+    }));
+
     return NextResponse.json({
       success: true,
       data: {
-        kepalaDesa: { nama: "", nip: "" },
-        sekretaris: { nama: "", nip: "" },
-        kaur: [],
-        kasi: [],
-        kepalaDusun: [],
+        kepala_desa: kepala_desa ? formatPerangkat(kepala_desa) : undefined,
+        sekretaris: sekretaris ? formatPerangkat(sekretaris) : undefined,
+        kaur: kaur.map(formatPerangkat),
+        kasi: kasi.map(formatPerangkat),
+        kepala_dusun: kepala_dusun.map(formatPerangkat),
+        perangkat_lain: perangkat_lain.map(formatPerangkat),
+        kepala_desa_sebelumnya: kepalaDesaSebelumnyaFormatted,
       },
     });
   } catch (error) {
-    console.error("Error loading struktur organisasi:", error);
+    console.error("Error loading struktur pemerintahan:", error);
     return NextResponse.json(
       { success: false, error: "Failed to load data" },
       { status: 500 },

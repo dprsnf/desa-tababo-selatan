@@ -66,7 +66,7 @@ function StatistikPage() {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
         <AdminNavbar onLogout={logout} />
         <div className="container mx-auto px-4 py-8">
           <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
@@ -79,7 +79,7 @@ function StatistikPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
       <AdminNavbar onLogout={logout} />
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -100,7 +100,7 @@ function StatistikPage() {
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg">
+          <div className="bg-linear-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100 text-sm font-semibold mb-1">Total Penduduk</p>
@@ -110,7 +110,7 @@ function StatistikPage() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl p-6 text-white shadow-lg">
+          <div className="bg-linear-to-br from-cyan-500 to-cyan-600 rounded-2xl p-6 text-white shadow-lg">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-cyan-100 text-sm font-semibold mb-1">Laki-laki</p>
@@ -123,7 +123,7 @@ function StatistikPage() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl p-6 text-white shadow-lg">
+          <div className="bg-linear-to-br from-pink-500 to-pink-600 rounded-2xl p-6 text-white shadow-lg">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-pink-100 text-sm font-semibold mb-1">Perempuan</p>
@@ -136,7 +136,7 @@ function StatistikPage() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
+          <div className="bg-linear-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-100 text-sm font-semibold mb-1">Jumlah KK</p>
@@ -344,7 +344,7 @@ function StatistikPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl hover:from-orange-700 hover:to-red-700 transition-all shadow-lg hover:shadow-xl font-semibold ${
+                  className={`flex items-center gap-2 px-8 py-3 bg-linear-to-r from-orange-600 to-red-600 text-white rounded-xl hover:from-orange-700 hover:to-red-700 transition-all shadow-lg hover:shadow-xl font-semibold ${
                     loading ? "opacity-70 cursor-not-allowed" : ""
                   }`}
                 >

@@ -14,6 +14,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check database connection
+    try {
+      await prisma.$connect();
+    } catch (dbError) {
+      console.error("Database connection error:", dbError);
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Tidak dapat terhubung ke database",
+        },
+        { status: 500 },
+      );
+    }
+
     const admin = await prisma.admin.findUnique({
       where: { username },
       select: {
@@ -77,11 +91,25 @@ export async function POST(request: NextRequest) {
         user: userWithoutPassword,
       },
     });
-  } catch {
+  } catch (error) {
+    console.error("Login error:", error);
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      env: {
+        hasDatabaseUrl: !!process.env.DATABASE_URL,
+        hasJwtSecret: !!process.env.JWT_SECRET,
+        nodeEnv: process.env.NODE_ENV,
+      },
+    });
+
     return NextResponse.json(
       {
         success: false,
         error: "Terjadi kesalahan saat login",
+        ...(process.env.NODE_ENV !== "production" && {
+          details: error instanceof Error ? error.message : "Unknown error",
+        }),
       },
       { status: 500 },
     );

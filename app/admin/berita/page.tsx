@@ -62,7 +62,7 @@ function BeritaPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
       <AdminNavbar onLogout={logout} />
 
       <div className="container mx-auto px-4 py-8">
@@ -80,7 +80,7 @@ function BeritaPage() {
             </div>
             <Link
               href="/admin/berita/create"
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-xl"
+              className="flex items-center gap-2 bg-linear-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-xl"
             >
               <FaPlus />
               Tambah Berita

@@ -79,7 +79,7 @@ export default function EditLayananPage() {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-100 p-4 sm:p-6 lg:p-8">
+      <div className="min-h-screen bg-linear-to-br from-teal-50 to-cyan-100 p-4 sm:p-6 lg:p-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <div className="flex justify-center items-center py-12">
@@ -92,7 +92,7 @@ export default function EditLayananPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-100 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-linear-to-br from-teal-50 to-cyan-100 p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex justify-between items-center">

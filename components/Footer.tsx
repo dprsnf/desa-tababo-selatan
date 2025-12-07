@@ -13,14 +13,18 @@ export default function Footer() {
   const quickLinks = [
     { href: "/", label: "Beranda" },
     { href: "/struktur-organisasi", label: "Struktur Organisasi" },
+    { href: "/berita", label: "Berita" },
+    { href: "/layanan", label: "Layanan" },
     { href: "/pertanggungjawaban", label: "Pertanggungjawaban" },
     { href: "/sejarah", label: "Sejarah Desa" },
+    { href: "/keunggulan", label: "Keunggulan" },
+    { href: "/faq", label: "FAQ" },
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-green-900 via-emerald-800 to-teal-900 text-white">
+    <footer className="relative bg-linear-to-br from-green-900 via-emerald-800 to-teal-900 text-white">
       {/* Decorative Top Border */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400"></div>
+      <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-green-400 via-emerald-400 to-teal-400"></div>
 
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -100,7 +104,7 @@ export default function Footer() {
             </h3>
             <div className="space-y-4 text-sm">
               <div className="flex items-start gap-3 group">
-                <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-green-600 transition-colors">
+                <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-green-600 transition-colors">
                   <FaMapMarkerAlt className="text-green-300" />
                 </div>
                 <span className="text-green-100 leading-relaxed">
@@ -108,7 +112,7 @@ export default function Footer() {
                 </span>
               </div>
               <div className="flex items-center gap-3 group">
-                <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-green-600 transition-colors">
+                <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-green-600 transition-colors">
                   <FaPhone className="text-green-300" />
                 </div>
                 <a href="tel:+62" className="text-green-100 hover:text-white transition-colors">
@@ -116,7 +120,7 @@ export default function Footer() {
                 </a>
               </div>
               <div className="flex items-center gap-3 group">
-                <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-green-600 transition-colors">
+                <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-green-600 transition-colors">
                   <FaEnvelope className="text-green-300" />
                 </div>
                 <a href="mailto:desa@tababo-selatan.id" className="text-green-100 hover:text-white transition-colors">
@@ -124,7 +128,7 @@ export default function Footer() {
                 </a>
               </div>
               <div className="flex items-center gap-3 group">
-                <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-green-600 transition-colors">
+                <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-green-600 transition-colors">
                   <FaWhatsapp className="text-green-300" />
                 </div>
                 <a href="https://wa.me/62" className="text-green-100 hover:text-white transition-colors">
@@ -166,7 +170,7 @@ export default function Footer() {
             aria-label="Scroll to top"
           >
             <span>Kembali ke Atas</span>
-            <MdArrowUpward className="text-lg group-hover:translate-y-[-4px] transition-transform" />
+            <MdArrowUpward className="text-lg group-hover:translate-y-1 transition-transform" />
           </button>
         </div>
       </div>

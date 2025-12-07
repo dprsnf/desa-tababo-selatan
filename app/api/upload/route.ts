@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir, unlink } from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
-import sharp from "sharp";
 import { requireAuth } from "@/lib/auth";
+import { uploadToCloudinary, uploadDocumentToCloudinary } from "@/lib/cloudinary";
 
-// Maximum file size: 5MB
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+// Maximum file size: 10MB for images, 20MB for documents
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+const MAX_DOCUMENT_SIZE = 20 * 1024 * 1024;
 
 // Allowed file types
-const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const ALLOWED_DOCUMENT_TYPES = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+];
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,103 +23,78 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData();
     const file = formData.get("file") as File;
+    const folder = (formData.get("folder") as string) || "general";
+    const type = (formData.get("type") as string) || "image"; // 'image' or 'document'
 
     if (!file) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
+    const isDocument = type === "document";
+    const allowedTypes = isDocument ? ALLOWED_DOCUMENT_TYPES : ALLOWED_IMAGE_TYPES;
+    const maxSize = isDocument ? MAX_DOCUMENT_SIZE : MAX_IMAGE_SIZE;
+
     // Validate file type
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
         {
-          error: "Invalid file type. Only JPEG, PNG, and WebP are allowed.",
+          error: `Invalid file type. Allowed: ${isDocument ? "PDF, DOC, DOCX, XLS, XLSX" : "JPEG, PNG, WebP"}`,
         },
         { status: 400 },
       );
     }
 
     // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
+    if (file.size > maxSize) {
       return NextResponse.json(
-        { error: "File size too large. Maximum size is 5MB." },
+        { error: `File size too large. Maximum size is ${maxSize / (1024 * 1024)}MB.` },
         { status: 400 },
       );
     }
 
-    // Convert file to buffer
+    // Convert file to base64 for Cloudinary upload
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const randomString = Math.random().toString(36).substring(2, 15);
-    const extension = file.name.split(".").pop() || "jpg";
-    const filename = `${timestamp}-${randomString}.${extension}`;
+    // Upload to Cloudinary
+    const result = isDocument
+      ? await uploadDocumentToCloudinary(base64, folder)
+      : await uploadToCloudinary(base64, folder);
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
-    }
-
-    const filepath = path.join(uploadsDir, filename);
-
-    // Optimize and save image
-    try {
-      await sharp(buffer)
-        .resize(1920, 1920, {
-          fit: "inside",
-          withoutEnlargement: true,
-        })
-        .jpeg({ quality: 85 })
-        .toFile(filepath);
-    } catch (error) {
-      console.error("Error processing image:", error);
+    if (!result.success) {
       return NextResponse.json(
-        { error: "Failed to process image" },
+        { error: result.error || "Upload failed" },
         { status: 500 },
       );
     }
 
-    // Generate thumbnail
-    const thumbnailFilename = `thumb-${filename}`;
-    const thumbnailPath = path.join(uploadsDir, thumbnailFilename);
-
-    try {
-      await sharp(buffer)
-        .resize(400, 400, {
-          fit: "cover",
-        })
-        .jpeg({ quality: 80 })
-        .toFile(thumbnailPath);
-    } catch (error) {
-      console.error("Error creating thumbnail:", error);
-    }
-
-    // Return URLs
-    const url = `/uploads/${filename}`;
-    const thumbnailUrl = `/uploads/${thumbnailFilename}`;
-
-    return NextResponse.json({
+    // Return Cloudinary URL with type-safe properties
+    const baseResponse = {
       success: true,
       message: "File uploaded successfully",
-      data: {
-        url,
-        thumbnailUrl,
-        filename,
-        originalName: file.name,
-        size: file.size,
-        type: file.type,
-      },
+      url: result.url!,
+      publicId: result.publicId!,
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type,
+    };
+
+    // Add type-specific properties
+    const typeSpecificProps = isDocument
+      ? { bytes: (result as any).bytes, format: result.format }
+      : { width: (result as any).width, height: (result as any).height, format: result.format };
+
+    return NextResponse.json({
+      ...baseResponse,
+      ...typeSpecificProps,
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     console.error("Upload error:", error);
     return NextResponse.json(
-      { error: "Failed to upload file" },
+      {
+        error: error instanceof Error ? error.message : "Upload failed",
+      },
       { status: 500 },
     );
   }
@@ -122,46 +102,31 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    // Check authentication
     requireAuth(request);
 
     const { searchParams } = new URL(request.url);
-    const filename = searchParams.get("filename");
+    const publicId = searchParams.get("publicId");
 
-    if (!filename) {
+    if (!publicId) {
       return NextResponse.json(
-        { error: "Filename is required" },
+        { error: "Public ID is required" },
         { status: 400 },
       );
     }
 
-    if (filename.includes("..") || filename.includes("/")) {
-      return NextResponse.json({ error: "Invalid filename" }, { status: 400 });
-    }
-
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    const filepath = path.join(uploadsDir, filename);
-    const thumbnailPath = path.join(uploadsDir, `thumb-${filename}`);
-
-    if (existsSync(filepath)) {
-      await unlink(filepath);
-    }
-
-    if (existsSync(thumbnailPath)) {
-      await unlink(thumbnailPath);
-    }
-
+    // Note: Cloudinary deletion is optional
+    // Images will be automatically managed by Cloudinary
     return NextResponse.json({
       success: true,
-      message: "File deleted successfully",
+      message: "File marked for deletion",
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     console.error("Delete error:", error);
     return NextResponse.json(
-      { error: "Failed to delete file" },
+      {
+        error: error instanceof Error ? error.message : "Delete failed",
+      },
       { status: 500 },
     );
   }

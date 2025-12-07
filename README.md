@@ -54,11 +54,18 @@ Website Desa Tababo Selatan adalah platform digital yang dirancang untuk meningk
 - ✅ **Struktur Organisasi** - Hierarki pemerintahan desa
 - ✅ **Kepala Desa Sebelumnya** - Riwayat kepemimpinan desa
 - ✅ **Pertanggungjawaban** - Laporan APBDes dan program kerja
+- ✅ **FAQ** - Pertanyaan yang sering ditanyakan
 
 ### Admin Panel
 - 🔐 **Login & Autentikasi** - Akses terlindungi untuk admin
 - 📊 **Dashboard** - Ringkasan statistik dan akses cepat
 - ✏️ **Edit Konten** - Kelola semua halaman dengan mudah
+- 📰 **Kelola Berita** - CRUD berita dan pengumuman
+- 📋 **Kelola Program** - Manajemen program dan kegiatan
+- 👥 **Data Perangkat** - Manajemen data perangkat desa
+- 🏢 **Layanan Desa** - Kelola layanan administrasi
+- 📊 **Pertanggungjawaban** - Upload dan kelola laporan
+- ❓ **FAQ Management** - Kelola pertanyaan dan jawaban
 - 💾 **Auto-save** - Penyimpanan otomatis perubahan
 
 ---

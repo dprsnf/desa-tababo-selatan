@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -10,13 +11,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
@@ -38,7 +32,7 @@ input[type="time"],
 input[type="datetime-local"],
 textarea,
 select {
-  color: #111827 !important; /* gray-900 */
+  color: #111827; /* gray-900 */
 }
 
 input[type="text"]::placeholder,
@@ -50,4 +44,58 @@ input[type="url"]::placeholder,
 input[type="search"]::placeholder,
 textarea::placeholder {
   color: #9ca3af; /* gray-400 */
+}
+
+/* Leaflet map styles */
+.leaflet-container {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+}
+
+.leaflet-popup-content {
+  margin: 8px 12px;
+}
+
+/* Prose/Article content styles */
+.prose,
+.prose * {
+  color: #111827; /* gray-900 */
+}
+
+.prose p,
+.prose div,
+.prose span,
+.prose li,
+.prose td,
+.prose th {
+  background-color: transparent;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  background-color: transparent;
+  font-weight: 700;
+}
+
+.prose strong,
+.prose b {
+  color: #000000; /* black */
+  font-weight: 700;
+}
+
+.prose a {
+  color: #16a34a; /* green-600 */
+  text-decoration: underline;
+}
+
+.prose img {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }

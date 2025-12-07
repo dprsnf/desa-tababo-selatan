@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient, LayananData } from "@/lib/api-client";
+import AdminNavbar from "@/components/AdminNavbar";
 
 export default function LayananPage() {
   const router = useRouter();
@@ -64,30 +65,16 @@ export default function LayananPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-100 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-linear-to-br from-teal-50 to-cyan-100">
+      <AdminNavbar onLogout={logout} />
+      
+      <div className="container mx-auto p-4 sm:p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Manajemen Layanan
-            </h1>
-            <p className="text-gray-600 mt-1">Kelola layanan publik desa</p>
-          </div>
-          <div className="flex gap-2">
-            <Link
-              href="/admin"
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              ← Dashboard
-            </Link>
-            <button
-              onClick={logout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-            >
-              Logout
-            </button>
-          </div>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Manajemen Layanan
+          </h1>
+          <p className="text-gray-600 mt-1">Kelola layanan publik desa</p>
         </div>
 
         {/* Search & Add */}
@@ -225,7 +212,7 @@ export default function LayananPage() {
                     <button
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                       disabled={page === 1}
-                      className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900"
+                      className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Sebelumnya
                     </button>
@@ -234,7 +221,7 @@ export default function LayananPage() {
                         setPage((p) => Math.min(totalPages, p + 1))
                       }
                       disabled={page === totalPages}
-                      className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900"
+                      className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Selanjutnya
                     </button>

@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useAuth, withAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api-client";
 import AdminNavbar from "@/components/AdminNavbar";
+import ImageUpload from "@/components/ImageUpload";
 import Link from "next/link";
 import { FaArrowLeft, FaSave, FaImage } from "react-icons/fa";
 import { MdArticle } from "react-icons/md";
@@ -106,7 +107,7 @@ function EditBeritaPage() {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
         <AdminNavbar onLogout={logout} />
         <div className="container mx-auto px-4 py-8">
           <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
@@ -119,7 +120,7 @@ function EditBeritaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
       <AdminNavbar onLogout={logout} />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -216,31 +217,16 @@ function EditBeritaPage() {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Gambar Utama <FaImage className="inline ml-1" />
-                </label>
-                <input
-                  type="url"
+                <ImageUpload
+                  label="Gambar Utama"
                   value={formData.gambarUtama}
-                  onChange={(e) =>
-                    setFormData({ ...formData, gambarUtama: e.target.value })
+                  onChange={(url) =>
+                    setFormData({ ...formData, gambarUtama: url || "" })
                   }
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-                  placeholder="https://example.com/image.jpg"
+                  folder="berita"
+                  aspectRatio="16/9"
+                  previewHeight="300px"
                 />
-                {formData.gambarUtama && (
-                  <div className="mt-3 rounded-xl overflow-hidden border-2 border-gray-200">
-                    <img
-                      src={formData.gambarUtama}
-                      alt="Preview"
-                      className="w-full h-48 object-cover"
-                      onError={(e) => {
-                        e.currentTarget.src =
-                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23f3f4f6' width='400' height='300'/%3E%3Ctext fill='%236b7280' font-family='Arial' font-size='16' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3EGambar tidak dapat dimuat%3C/text%3E%3C/svg%3E";
-                      }}
-                    />
-                  </div>
-                )}
               </div>
 
               <div className="md:col-span-2">
@@ -323,7 +309,7 @@ function EditBeritaPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-xl font-semibold ${
+                    className={`flex items-center gap-2 px-6 py-3 bg-linear-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-xl font-semibold ${
                       loading ? "opacity-70 cursor-not-allowed" : ""
                     }`}
                   >

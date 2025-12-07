@@ -11,7 +11,7 @@ interface FeatureCardProps {
 export default function FeatureCard({ icon, title, description, link, color }: FeatureCardProps) {
   return (
     <Link href={link}>
-      <div className={`bg-gradient-to-br ${color} rounded-2xl p-8 text-white h-full shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer`}>
+      <div className={`bg-linear-to-br ${color} rounded-2xl p-8 text-white h-full shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer`}>
         <div className="mb-6">
           {icon}
         </div>

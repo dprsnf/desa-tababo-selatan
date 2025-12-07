@@ -15,6 +15,7 @@ import {
   FaEdit,
   FaNewspaper,
   FaClipboardList,
+  FaQuestionCircle,
 } from "react-icons/fa";
 import { MdDashboard, MdSettings } from "react-icons/md";
 
@@ -67,9 +68,9 @@ function AdminDashboard() {
       color: "from-purple-500 to-pink-500",
     },
     {
-      title: "Struktur Organisasi",
+      title: "Perangkat Desa",
       icon: <FaUsers />,
-      href: "/admin/kepala-desa",
+      href: "/admin/perangkat",
       desc: "Kelola data perangkat desa",
       color: "from-green-500 to-emerald-500",
     },
@@ -88,10 +89,45 @@ function AdminDashboard() {
       color: "from-teal-500 to-green-500",
     },
     {
+      title: "FAQ",
+      icon: <FaQuestionCircle />,
+      href: "/admin/faq",
+      desc: "Pertanyaan yang sering ditanyakan",
+      color: "from-violet-500 to-purple-500",
+    },
+    {
+      title: "Statistik Desa",
+      icon: <FaChartLine />,
+      href: "/admin/statistik",
+      desc: "Kelola data statistik desa",
+      color: "from-indigo-500 to-blue-500",
+    },
+    {
+      title: "Konten Website",
+      icon: <FaEdit />,
+      href: "/admin/edit/beranda",
+      desc: "Edit konten halaman website",
+      color: "from-pink-500 to-rose-500",
+    },
+    {
+      title: "Sejarah Desa",
+      icon: <FaHistory />,
+      href: "/admin/edit/sejarah",
+      desc: "Edit konten halaman sejarah",
+      color: "from-amber-500 to-orange-500",
+    },
+    {
+      title: "Keunggulan Desa",
+      icon: <FaStar />,
+      href: "/admin/edit/keunggulan",
+      desc: "Edit keunggulan dan potensi desa",
+      color: "from-yellow-500 to-amber-500",
+    },
+    {
       title: "Pengaturan",
       icon: <MdSettings />,
       href: "/admin/pengaturan",
-      desc: "Pengaturan website dan statistik",
+      desc: "Pengaturan website dan konfigurasi",
       color: "from-gray-500 to-slate-500",
     },
   ];
@@ -116,12 +152,12 @@ function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
       <AdminNavbar onLogout={logout} />
 
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-700 rounded-2xl shadow-2xl p-8 mb-8 text-white">
+        <div className="bg-linear-to-r from-green-600 via-emerald-600 to-teal-700 rounded-2xl shadow-2xl p-8 mb-8 text-white">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold mb-2">
@@ -184,10 +220,10 @@ function AdminDashboard() {
                 href={item.href}
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 overflow-hidden"
               >
-                <div className={`h-2 bg-gradient-to-r ${item.color}`}></div>
+                <div className={`h-2 bg-linear-to-r ${item.color}`}></div>
                 <div className="p-6">
                   <div
-                    className={`w-16 h-16 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center mb-4 text-white text-3xl group-hover:scale-110 transition-transform shadow-lg`}
+                    className={`w-16 h-16 bg-linear-to-br ${item.color} rounded-2xl flex items-center justify-center mb-4 text-white text-3xl group-hover:scale-110 transition-transform shadow-lg`}
                   >
                     {item.icon}
                   </div>

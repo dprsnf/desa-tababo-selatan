@@ -11,6 +11,7 @@ interface ImageUploadProps {
   maxSize?: number; // in MB
   aspectRatio?: string;
   previewHeight?: string;
+  folder?: string; // Cloudinary folder name
 }
 
 export default function ImageUpload({
@@ -20,6 +21,7 @@ export default function ImageUpload({
   maxSize = 5,
   aspectRatio = "16/9",
   previewHeight = "300px",
+  folder = "general",
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,9 +56,10 @@ export default function ImageUpload({
       };
       reader.readAsDataURL(file);
 
-      // Upload to server
+      // Upload to server (Cloudinary)
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("folder", folder);
 
       const token = localStorage.getItem("token");
       const response = await fetch("/api/upload", {
@@ -73,9 +76,9 @@ export default function ImageUpload({
       }
 
       const data = await response.json();
-      if (data.success && data.data.url) {
-        onChange(data.data.url);
-        setPreview(data.data.url);
+      if (data.success && data.url) {
+        onChange(data.url);
+        setPreview(data.url);
       } else {
         throw new Error("Upload gagal");
       }

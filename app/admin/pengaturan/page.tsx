@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/lib/api-client';
+import AdminNavbar from '@/components/AdminNavbar';
 
 export default function PengaturanPage() {
   const router = useRouter();
@@ -95,8 +96,9 @@ export default function PengaturanPage() {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 p-4 sm:p-6 lg:p-8">
-        <div className="max-w-5xl mx-auto">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-gray-100">
+        <AdminNavbar onLogout={logout} />
+        <div className="container mx-auto p-4 sm:p-6 lg:p-8">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <div className="flex justify-center items-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-600"></div>
@@ -108,28 +110,14 @@ export default function PengaturanPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-gray-100">
+      <AdminNavbar onLogout={logout} />
+      
+      <div className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-5xl">
         {/* Header */}
-        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Pengaturan Website</h1>
-            <p className="text-gray-600 mt-1">Kelola informasi dan konfigurasi website desa</p>
-          </div>
-          <div className="flex gap-2">
-            <Link
-              href="/admin"
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              ← Dashboard
-            </Link>
-            <button
-              onClick={logout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-            >
-              Logout
-            </button>
-          </div>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Pengaturan Website</h1>
+          <p className="text-gray-600 mt-1">Kelola informasi dan konfigurasi website desa</p>
         </div>
 
         {/* Form Card */}

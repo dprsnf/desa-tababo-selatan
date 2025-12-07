@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { GiVillage } from "react-icons/gi";
-import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
-import { MdDashboard, MdAccountBalance, MdHistory, MdStars } from "react-icons/md";
-import { FaUsers, FaUserTie } from "react-icons/fa";
+import { FaBars, FaTimes, FaQuestionCircle, FaNewspaper } from "react-icons/fa";
+import { MdDashboard, MdAccountBalance, MdHistory, MdStars, MdMiscellaneousServices } from "react-icons/md";
+import { FaUsers } from "react-icons/fa";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -33,14 +33,19 @@ export default function Navbar() {
       icon: <FaUsers className="text-xl" />
     },
     { 
+      href: "/berita", 
+      label: "Berita",
+      icon: <FaNewspaper className="text-xl" />
+    },
+    { 
+      href: "/layanan", 
+      label: "Layanan",
+      icon: <MdMiscellaneousServices className="text-xl" />
+    },
+    { 
       href: "/pertanggungjawaban", 
       label: "Pertanggungjawaban",
       icon: <MdAccountBalance className="text-xl" />
-    },
-    { 
-      href: "/kepala-desa-sebelumnya", 
-      label: "Kepala Desa",
-      icon: <FaUserTie className="text-xl" />
     },
     { 
       href: "/sejarah", 
@@ -52,11 +57,16 @@ export default function Navbar() {
       label: "Keunggulan",
       icon: <MdStars className="text-xl" />
     },
+    { 
+      href: "/faq", 
+      label: "FAQ",
+      icon: <FaQuestionCircle className="text-xl" />
+    },
   ];
 
   return (
     <nav 
-      className={`bg-gradient-to-r from-green-700 via-emerald-600 to-teal-700 sticky top-0 z-50 transition-all duration-300 ${
+      className={`bg-linear-to-r from-green-700 via-emerald-600 to-teal-700 sticky top-0 z-50 transition-all duration-300 ${
         scrolled ? "shadow-2xl backdrop-blur-sm bg-opacity-95" : "shadow-lg"
       }`}
     >

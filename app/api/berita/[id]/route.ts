@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
 import { Prisma } from "@/app/generated/prisma/client";
 
-// GET berita by ID
+// GET berita by ID or slug
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -11,9 +11,17 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const berita = await prisma.berita.findUnique({
-      where: { id },
+    // Try to find by slug first, then by ID
+    let berita = await prisma.berita.findUnique({
+      where: { slug: id },
     });
+
+    // If not found by slug, try by ID
+    if (!berita) {
+      berita = await prisma.berita.findUnique({
+        where: { id },
+      });
+    }
 
     if (!berita) {
       return NextResponse.json(
@@ -24,7 +32,7 @@ export async function GET(
 
     // Increment view count
     await prisma.berita.update({
-      where: { id },
+      where: { id: berita.id },
       data: { dilihat: { increment: 1 } },
     });
 

@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api-client";
+import ImageUpload from "@/components/ImageUpload";
 
 export default function EditPerangkatPage() {
   const router = useRouter();
@@ -69,7 +70,7 @@ export default function EditPerangkatPage() {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4 sm:p-6 lg:p-8">
+      <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 p-4 sm:p-6 lg:p-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <div className="flex justify-center items-center py-12">
@@ -82,7 +83,7 @@ export default function EditPerangkatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex justify-between items-center">
@@ -155,35 +156,18 @@ export default function EditPerangkatPage() {
               />
             </div>
 
-            {/* Foto URL */}
+            {/* Foto */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                URL Foto <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="url"
-                required
+              <ImageUpload
+                label="Foto Perangkat *"
                 value={formData.foto}
-                onChange={(e) =>
-                  setFormData({ ...formData, foto: e.target.value })
+                onChange={(url) =>
+                  setFormData({ ...formData, foto: url || "" })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="https://example.com/foto.jpg"
+                folder="perangkat"
+                aspectRatio="1/1"
+                previewHeight="300px"
               />
-              {formData.foto && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">Preview:</p>
-                  <img
-                    src={formData.foto}
-                    alt="Preview"
-                    className="w-32 h-32 object-cover rounded-lg border-2 border-gray-200"
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "https://via.placeholder.com/128?text=Error";
-                    }}
-                  />
-                </div>
-              )}
             </div>
 
             {/* Action Buttons */}

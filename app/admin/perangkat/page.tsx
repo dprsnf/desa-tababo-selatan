@@ -52,7 +52,7 @@ function PerangkatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
       <AdminNavbar onLogout={logout} />
 
       <div className="container mx-auto px-4 py-8">
@@ -141,7 +141,7 @@ function PerangkatPage() {
                         className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-teal-100"
                       />
                     ) : (
-                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center mb-4 border-4 border-teal-200">
+                      <div className="w-24 h-24 rounded-full bg-linear-to-br from-teal-100 to-cyan-100 flex items-center justify-center mb-4 border-4 border-teal-200">
                         <MdPeople className="text-4xl text-teal-600" />
                       </div>
                     )}

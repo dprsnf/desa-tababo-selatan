@@ -99,7 +99,102 @@ model Berita {
   @@index([tanggalTerbit])
 }
 
-// Pertanggungjawaban
+// Konfigurasi Halaman Pertanggungjawaban
+model HalamanPertanggungjawaban {
+  id      String @id @default(cuid())
+  judul   String @default("Pertanggungjawaban Desa")
+  konten  String @db.Text // Deskripsi/intro halaman
+  aktif   Boolean @default(true)
+  dibuat     DateTime @default(now())
+  diperbarui DateTime @updatedAt
+}
+
+// APBDes (Anggaran Pendapatan dan Belanja Desa)
+model APBDes {
+  id              String  @id @default(cuid())
+  tahun           Int     @unique
+  totalAnggaran   Float
+  pendapatan      Float
+  belanja         Float
+  pembiayaan      Float
+  
+  // Relasi
+  realisasi       RealisasiAPBDes[]
+  dokumen         DokumenPertanggungjawaban[]
+  
+  aktif           Boolean   @default(true)
+  dibuat          DateTime  @default(now())
+  diperbarui      DateTime  @updatedAt
+
+  @@index([tahun])
+  @@index([aktif])
+}
+
+// Realisasi APBDes per item
+model RealisasiAPBDes {
+  id              String  @id @default(cuid())
+  apbdesId        String
+  apbdes          APBDes  @relation(fields: [apbdesId], references: [id], onDelete: Cascade)
+  
+  uraian          String
+  anggaran        Float
+  realisasi       Float
+  persentase      Float
+  
+  urutan          Int     @default(0)
+  dibuat          DateTime @default(now())
+  diperbarui      DateTime @updatedAt
+
+  @@index([apbdesId])
+  @@index([urutan])
+}
+
+// Program dan Kegiatan per Bidang
+model ProgramBidang {
+  id              String  @id @default(cuid())
+  tahun           Int
+  bidang          String  // Nama bidang
+  kegiatan        Json    // Array kegiatan dalam bidang
+  
+  urutan          Int     @default(0)
+  aktif           Boolean @default(true)
+  dibuat          DateTime @default(now())
+  diperbarui      DateTime @updatedAt
+
+  @@index([tahun])
+  @@index([aktif])
+  @@index([urutan])
+}
+
+// Dokumen Pertanggungjawaban
+model DokumenPertanggungjawaban {
+  id              String  @id @default(cuid())
+  apbdesId        String?
+  apbdes          APBDes? @relation(fields: [apbdesId], references: [id], onDelete: Cascade)
+  
+  judul           String
+  deskripsi       String? @db.Text
+  fileUrl         String
+  namaFile        String
+  ukuranFile      Int?    // dalam bytes
+  tipeFile        String? // pdf, xlsx, docx, etc
+  publicId        String? // Cloudinary public ID untuk delete
+  
+  kategori        String  // apbdes, lkpj, lppd, lainnya
+  tahun           Int
+  
+  jumlahUnduhan   Int     @default(0)
+  aktif           Boolean @default(true)
+  dibuat          DateTime @default(now())
+  diperbarui      DateTime @updatedAt
+
+  @@index([apbdesId])
+  @@index([tahun])
+  @@index([kategori])
+  @@index([aktif])
+}
+
+// Model lama untuk backward compatibility (bisa dihapus nanti)
 model Pertanggungjawaban {
   id        String  @id @default(cuid())
   tahun     Int
