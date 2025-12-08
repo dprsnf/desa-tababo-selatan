@@ -74,7 +74,7 @@ function EditSejarah() {
       setSaving(true);
 
       // Get token from localStorage
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("adminToken");
 
       const response = await fetch("/api/sejarah", {
         method: "PUT",

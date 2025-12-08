@@ -61,7 +61,7 @@ function EditFAQPage() {
 
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("adminToken");
 
       const response = await fetch(`/api/faq/${id}`, {
         method: "PUT",

@@ -160,8 +160,10 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     // Require authentication
-    const user = requireAuth(request);
-    if (!user) {
+    let user;
+    try {
+      user = requireAuth(request);
+    } catch (error) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 },

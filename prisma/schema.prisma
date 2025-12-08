@@ -38,6 +38,8 @@ model Statistik {
   jumlahRW       Int      @default(0)
   jumlahRT       Int      @default(0)
   jumlahDusun    Int      @default(0)
+  latitude       Float?   @default(0.9629460591112564)
+  longitude      Float?   @default(124.80253311393106)
   updated_at     DateTime @updatedAt
 }
 

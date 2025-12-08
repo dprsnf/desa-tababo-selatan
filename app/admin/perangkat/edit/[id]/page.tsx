@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, withAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api-client";
 import ImageUpload from "@/components/ImageUpload";
+import AdminNavbar from "@/components/AdminNavbar";
+import { FaArrowLeft, FaSave, FaUser } from "react-icons/fa";
+import { MdPeople } from "react-icons/md";
 
-export default function EditPerangkatPage() {
+function EditPerangkatPage() {
   const router = useRouter();
   const params = useParams();
   const { logout } = useAuth();
@@ -15,9 +18,22 @@ export default function EditPerangkatPage() {
   const [loadingData, setLoadingData] = useState(true);
   const [formData, setFormData] = useState({
     namaLengkap: "",
-    jabatan: "",
-    foto: "",
+    jabatan: "Kepala Desa",
     nip: "",
+    tempatLahir: "",
+    tanggalLahir: "",
+    pendidikan: "",
+    foto: "",
+    periode: "",
+    tahunMulai: "",
+    tahunSelesai: "",
+    visi: "",
+    misi: "",
+    prestasi: "",
+    programUnggulan: "",
+    namaDusun: "",
+    sedangMenjabat: true,
+    urutan: "0",
   });
 
   useEffect(() => {
@@ -33,9 +49,22 @@ export default function EditPerangkatPage() {
         const data = response.data;
         setFormData({
           namaLengkap: data.namaLengkap || "",
-          jabatan: data.jabatan || "",
+          jabatan: data.jabatan || "Kepala Desa",
           foto: data.foto || "",
           nip: data.nip || "",
+          tempatLahir: data.tempatLahir || "",
+          tanggalLahir: data.tanggalLahir || "",
+          pendidikan: data.pendidikan || "",
+          periode: data.periode || "",
+          tahunMulai: data.tahunMulai ? String(data.tahunMulai) : "",
+          tahunSelesai: data.tahunSelesai ? String(data.tahunSelesai) : "",
+          visi: data.visi || "",
+          misi: Array.isArray(data.misi) ? data.misi.join("\n") : "",
+          prestasi: Array.isArray(data.prestasi) ? data.prestasi.join("\n") : "",
+          programUnggulan: Array.isArray(data.programUnggulan) ? data.programUnggulan.join("\n") : "",
+          namaDusun: data.namaDusun || "",
+          sedangMenjabat: data.sedangMenjabat ?? true,
+          urutan: data.urutan !== undefined ? String(data.urutan) : "0",
         });
       }
     } catch (error) {
@@ -54,7 +83,28 @@ export default function EditPerangkatPage() {
     e.preventDefault();
     try {
       setLoading(true);
-      await apiClient.updatePerangkat(params.id as string, formData);
+      
+      const submitData = {
+        namaLengkap: formData.namaLengkap,
+        jabatan: formData.jabatan,
+        nip: formData.nip || undefined,
+        tempatLahir: formData.tempatLahir || undefined,
+        tanggalLahir: formData.tanggalLahir || undefined,
+        pendidikan: formData.pendidikan || undefined,
+        foto: formData.foto || undefined,
+        periode: formData.periode || undefined,
+        tahunMulai: formData.tahunMulai ? parseInt(formData.tahunMulai) : undefined,
+        tahunSelesai: formData.tahunSelesai ? parseInt(formData.tahunSelesai) : undefined,
+        visi: formData.visi || undefined,
+        misi: formData.misi ? formData.misi.split("\n").filter(m => m.trim()) : undefined,
+        prestasi: formData.prestasi ? formData.prestasi.split("\n").filter(p => p.trim()) : undefined,
+        programUnggulan: formData.programUnggulan ? formData.programUnggulan.split("\n").filter(p => p.trim()) : undefined,
+        namaDusun: formData.namaDusun || undefined,
+        sedangMenjabat: formData.sedangMenjabat,
+        urutan: parseInt(formData.urutan),
+      };
+      
+      await apiClient.updatePerangkat(params.id as string, submitData);
       alert("Perangkat berhasil diperbarui");
       router.push("/admin/perangkat");
     } catch (error) {
@@ -70,11 +120,12 @@ export default function EditPerangkatPage() {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 p-4 sm:p-6 lg:p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-8">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
+        <AdminNavbar onLogout={logout} />
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
             </div>
           </div>
         </div>
@@ -83,120 +134,390 @@ export default function EditPerangkatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-50 to-indigo-100 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Edit Perangkat Desa
-            </h1>
-            <p className="text-gray-600 mt-1">
-              Perbarui informasi perangkat desa
-            </p>
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50">
+      <AdminNavbar onLogout={logout} />
+
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                <MdPeople className="text-teal-600" />
+                Edit Perangkat Desa
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Perbarui informasi perangkat desa
+              </p>
+            </div>
+            <Link
+              href="/admin/perangkat"
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              <FaArrowLeft />
+              Kembali
+            </Link>
           </div>
-          <button
-            onClick={logout}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          >
-            Logout
-          </button>
-        </div>
 
-        {/* Form Card */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Nama */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nama Lengkap <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.namaLengkap}
-                onChange={(e) =>
-                  setFormData({ ...formData, namaLengkap: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="Masukkan nama lengkap"
-              />
+            {/* Data Pribadi */}
+            <div className="border-2 border-gray-200 rounded-xl p-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <FaUser className="text-teal-600" />
+                Data Pribadi
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Nama Lengkap <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.namaLengkap}
+                    onChange={(e) =>
+                      setFormData({ ...formData, namaLengkap: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    placeholder="Masukkan nama lengkap"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Jabatan <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={formData.jabatan}
+                    onChange={(e) =>
+                      setFormData({ ...formData, jabatan: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    required
+                  >
+                    <option value="Kepala Desa">Kepala Desa</option>
+                    <option value="Sekretaris Desa">Sekretaris Desa</option>
+                    <option value="Kepala Urusan Umum">Kepala Urusan Umum</option>
+                    <option value="Kepala Urusan Keuangan">Kepala Urusan Keuangan</option>
+                    <option value="Kepala Urusan Perencanaan">Kepala Urusan Perencanaan</option>
+                    <option value="Kepala Seksi Pemerintahan">Kepala Seksi Pemerintahan</option>
+                    <option value="Kepala Seksi Kesejahteraan">Kepala Seksi Kesejahteraan</option>
+                    <option value="Kepala Seksi Pelayanan">Kepala Seksi Pelayanan</option>
+                    <option value="Kepala Dusun">Kepala Dusun</option>
+                    <option value="Staf">Staf</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    NIP
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.nip}
+                    onChange={(e) =>
+                      setFormData({ ...formData, nip: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    placeholder="Nomor Induk Pegawai"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Tempat Lahir
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.tempatLahir}
+                    onChange={(e) =>
+                      setFormData({ ...formData, tempatLahir: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    placeholder="Kota tempat lahir"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Tanggal Lahir
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.tanggalLahir}
+                    onChange={(e) =>
+                      setFormData({ ...formData, tanggalLahir: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Pendidikan Terakhir
+                  </label>
+                  <select
+                    value={formData.pendidikan}
+                    onChange={(e) =>
+                      setFormData({ ...formData, pendidikan: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                  >
+                    <option value="">Pilih Pendidikan</option>
+                    <option value="SD">SD</option>
+                    <option value="SMP">SMP</option>
+                    <option value="SMA/SMK">SMA/SMK</option>
+                    <option value="D3">D3</option>
+                    <option value="S1">S1</option>
+                    <option value="S2">S2</option>
+                    <option value="S3">S3</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Nama Dusun
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.namaDusun}
+                    onChange={(e) =>
+                      setFormData({ ...formData, namaDusun: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    placeholder="Khusus untuk Kepala Dusun"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Foto Perangkat
+                  </label>
+                  <ImageUpload
+                    label=""
+                    value={formData.foto}
+                    onChange={(url) =>
+                      setFormData({ ...formData, foto: url || "" })
+                    }
+                    folder="perangkat"
+                    aspectRatio="1/1"
+                    previewHeight="300px"
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Jabatan */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Jabatan <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.jabatan}
-                onChange={(e) =>
-                  setFormData({ ...formData, jabatan: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="Contoh: Kepala Desa, Sekretaris Desa"
-              />
+            {/* Data Jabatan */}
+            <div className="border-2 border-gray-200 rounded-xl p-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                Informasi Jabatan
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Periode
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.periode}
+                    onChange={(e) =>
+                      setFormData({ ...formData, periode: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    placeholder="Contoh: 2020-2026"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Urutan Tampilan
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.urutan}
+                    onChange={(e) =>
+                      setFormData({ ...formData, urutan: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    placeholder="0"
+                    min="0"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Urutan tampilan di website (semakin kecil semakin atas)
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Tahun Mulai
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.tahunMulai}
+                    onChange={(e) =>
+                      setFormData({ ...formData, tahunMulai: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    placeholder="2020"
+                    min="1900"
+                    max="2100"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Tahun Selesai
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.tahunSelesai}
+                    onChange={(e) =>
+                      setFormData({ ...formData, tahunSelesai: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all"
+                    placeholder="2026"
+                    min="1900"
+                    max="2100"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.sedangMenjabat}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          sedangMenjabat: e.target.checked,
+                        })
+                      }
+                      className="w-5 h-5 rounded border-2 border-gray-300 text-teal-600 focus:ring-2 focus:ring-teal-200"
+                    />
+                    <span className="text-sm font-semibold text-gray-700">
+                      Sedang Menjabat
+                    </span>
+                  </label>
+                </div>
+              </div>
             </div>
 
-            {/* NIP */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                NIP (Opsional)
-              </label>
-              <input
-                type="text"
-                value={formData.nip}
-                onChange={(e) =>
-                  setFormData({ ...formData, nip: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="Nomor Induk Pegawai"
-              />
-            </div>
+            {/* Visi & Misi (Khusus Kepala Desa) */}
+            {formData.jabatan === "Kepala Desa" && (
+              <div className="border-2 border-teal-200 rounded-xl p-6 bg-teal-50">
+                <h2 className="text-xl font-bold text-gray-800 mb-4">
+                  Visi, Misi & Program (Khusus Kepala Desa)
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Visi
+                    </label>
+                    <textarea
+                      value={formData.visi}
+                      onChange={(e) =>
+                        setFormData({ ...formData, visi: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all resize-none bg-white"
+                      placeholder="Visi kepemimpinan..."
+                      rows={3}
+                    />
+                  </div>
 
-            {/* Foto */}
-            <div>
-              <ImageUpload
-                label="Foto Perangkat *"
-                value={formData.foto}
-                onChange={(url) =>
-                  setFormData({ ...formData, foto: url || "" })
-                }
-                folder="perangkat"
-                aspectRatio="1/1"
-                previewHeight="300px"
-              />
-            </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Misi
+                    </label>
+                    <textarea
+                      value={formData.misi}
+                      onChange={(e) =>
+                        setFormData({ ...formData, misi: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all resize-none bg-white"
+                      placeholder="Pisahkan setiap misi dengan enter/baris baru"
+                      rows={5}
+                    />
+                    <p className="text-xs text-gray-600 mt-1">
+                      Tulis setiap misi di baris terpisah
+                    </p>
+                  </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4 pt-4">
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
-              >
-                {loading ? "Menyimpan..." : "Simpan Perubahan"}
-              </button>
-              <Link
-                href="/admin/perangkat"
-                className="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition-colors text-center font-medium"
-              >
-                Batal
-              </Link>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Program Unggulan
+                    </label>
+                    <textarea
+                      value={formData.programUnggulan}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          programUnggulan: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all resize-none bg-white"
+                      placeholder="Pisahkan setiap program dengan enter/baris baru"
+                      rows={4}
+                    />
+                    <p className="text-xs text-gray-600 mt-1">
+                      Tulis setiap program di baris terpisah
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Prestasi
+                    </label>
+                    <textarea
+                      value={formData.prestasi}
+                      onChange={(e) =>
+                        setFormData({ ...formData, prestasi: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all resize-none bg-white"
+                      placeholder="Pisahkan setiap prestasi dengan enter/baris baru"
+                      rows={4}
+                    />
+                    <p className="text-xs text-gray-600 mt-1">
+                      Tulis setiap prestasi di baris terpisah
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Submit Buttons */}
+            <div className="border-t-2 border-gray-200 pt-6">
+              <div className="flex items-center justify-end gap-3">
+                <Link
+                  href="/admin/perangkat"
+                  className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-semibold"
+                >
+                  Batal
+                </Link>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-xl font-semibold ${
+                    loading ? "opacity-70 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {loading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Menyimpan...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaSave />
+                      <span>Simpan Perubahan</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </form>
-        </div>
-
-        {/* Info Card */}
-        <div className="mt-6 bg-purple-50 border border-purple-200 rounded-lg p-4">
-          <p className="text-sm text-purple-800">
-            <strong>Tips:</strong> Pastikan URL foto valid dan dapat diakses.
-            Gunakan format gambar JPG, PNG, atau WebP untuk hasil terbaik.
-          </p>
         </div>
       </div>
     </div>
   );
 }
+
+export default withAuth(EditPerangkatPage);

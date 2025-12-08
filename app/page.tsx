@@ -74,6 +74,10 @@ export default function Home() {
   const [sliders, setSliders] = useState<SliderData[]>([]);
   const [beritaList, setBeritaList] = useState<Berita[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mapCoordinates, setMapCoordinates] = useState({
+    latitude: 0.9629460591112564,
+    longitude: 124.80253311393106,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -123,6 +127,20 @@ export default function Home() {
           const beritaData = await beritaRes.json();
           if (beritaData.success && beritaData.data) {
             setBeritaList(beritaData.data);
+          }
+        }
+
+        // Fetch statistik data untuk koordinat peta
+        const statistikRes = await fetch("/api/statistik");
+        if (statistikRes.ok) {
+          const statistikData = await statistikRes.json();
+          if (statistikData.success && statistikData.data) {
+            if (statistikData.data.latitude && statistikData.data.longitude) {
+              setMapCoordinates({
+                latitude: statistikData.data.latitude,
+                longitude: statistikData.data.longitude,
+              });
+            }
           }
         }
       } catch (error) {
@@ -413,10 +431,10 @@ export default function Home() {
 
       {/* Map Section */}
       <MapSection
-        latitude={0.9629460591112564}
-        longitude={124.80253311393106}
+        latitude={mapCoordinates.latitude}
+        longitude={mapCoordinates.longitude}
         desaNama="Desa Tababo Selatan"
-        alamat="Kecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten], Provinsi Gorontalo"
+        alamat="Kecamatan Belang, Kabupaten Minahasa Tenggara, Provinsi Sulawesi Utara"
       />
 
       {/* CTA Section */}

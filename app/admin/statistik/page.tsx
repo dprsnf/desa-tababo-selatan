@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth, withAuth } from "@/contexts/AuthContext";
 import { apiClient, StatistikData } from "@/lib/api-client";
 import AdminNavbar from "@/components/AdminNavbar";
-import { FaSave, FaUsers, FaMale, FaFemale, FaHome, FaMapMarkedAlt } from "react-icons/fa";
+import { FaSave, FaUsers, FaMale, FaFemale, FaHome, FaMapMarkedAlt, FaMapMarkerAlt, FaExternalLinkAlt, FaInfoCircle } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 
 function StatistikPage() {
@@ -20,6 +20,8 @@ function StatistikPage() {
     jumlahRW: 0,
     jumlahRT: 0,
     jumlahDusun: 0,
+    latitude: 0.9629460591112564,
+    longitude: 124.80253311393106,
   });
 
   useEffect(() => {
@@ -48,7 +50,12 @@ function StatistikPage() {
     setLoading(true);
 
     try {
-      await apiClient.updateStatistik(formData);
+      // Calculate total penduduk from laki-laki + perempuan
+      const dataToSubmit = {
+        ...formData,
+        jumlahPenduduk: formData.lakiLaki + formData.perempuan,
+      };
+      await apiClient.updateStatistik(dataToSubmit);
       alert("Data statistik berhasil diperbarui!");
     } catch (error) {
       const errorMessage =
@@ -104,19 +111,19 @@ function StatistikPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100 text-sm font-semibold mb-1">Total Penduduk</p>
-                <p className="text-3xl font-bold">{formData.jumlahPenduduk.toLocaleString("id-ID")}</p>
+                <p className="text-3xl font-bold">{(formData.lakiLaki + formData.perempuan).toLocaleString("id-ID")}</p>
+                <p className="text-xs text-blue-200 mt-1">Otomatis dihitung</p>
               </div>
               <FaUsers className="text-5xl text-blue-200 opacity-50" />
             </div>
           </div>
-
           <div className="bg-linear-to-br from-cyan-500 to-cyan-600 rounded-2xl p-6 text-white shadow-lg">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-cyan-100 text-sm font-semibold mb-1">Laki-laki</p>
                 <p className="text-3xl font-bold">{formData.lakiLaki.toLocaleString("id-ID")}</p>
                 <p className="text-xs text-cyan-200 mt-1">
-                  {calculatePercentage(formData.lakiLaki, formData.jumlahPenduduk)}%
+                  {calculatePercentage(formData.lakiLaki, formData.lakiLaki + formData.perempuan)}%
                 </p>
               </div>
               <FaMale className="text-5xl text-cyan-200 opacity-50" />
@@ -129,7 +136,7 @@ function StatistikPage() {
                 <p className="text-pink-100 text-sm font-semibold mb-1">Perempuan</p>
                 <p className="text-3xl font-bold">{formData.perempuan.toLocaleString("id-ID")}</p>
                 <p className="text-xs text-pink-200 mt-1">
-                  {calculatePercentage(formData.perempuan, formData.jumlahPenduduk)}%
+                  {calculatePercentage(formData.perempuan, formData.lakiLaki + formData.perempuan)}%
                 </p>
               </div>
               <FaFemale className="text-5xl text-pink-200 opacity-50" />
@@ -159,26 +166,6 @@ function StatistikPage() {
                 Demografi Penduduk
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Total Penduduk <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.jumlahPenduduk}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        jumlahPenduduk: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
-                    placeholder="0"
-                    min="0"
-                    required
-                  />
-                </div>
-
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Laki-laki <span className="text-red-500">*</span>
@@ -221,6 +208,22 @@ function StatistikPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Total Penduduk
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.lakiLaki + formData.perempuan}
+                    disabled
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-gray-100 text-gray-600 cursor-not-allowed"
+                    placeholder="0"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Otomatis dihitung dari laki-laki + perempuan
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Jumlah Keluarga (KK) <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -239,15 +242,6 @@ function StatistikPage() {
                   />
                 </div>
               </div>
-
-              {/* Validation Warning */}
-              {formData.lakiLaki + formData.perempuan !== formData.jumlahPenduduk && (
-                <div className="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded">
-                  <p className="text-sm text-yellow-800 font-semibold">
-                    ⚠️ Peringatan: Jumlah laki-laki + perempuan ({formData.lakiLaki + formData.perempuan}) tidak sama dengan total penduduk ({formData.jumlahPenduduk})
-                  </p>
-                </div>
-              )}
             </div>
 
             {/* Wilayah Administratif */}
@@ -334,6 +328,103 @@ function StatistikPage() {
                     min="0"
                     required
                   />
+                </div>
+              </div>
+            </div>
+
+            {/* Koordinat Peta */}
+            <div className="border-2 border-gray-200 rounded-xl p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <FaMapMarkerAlt className="text-red-600" />
+                Koordinat Lokasi Peta
+              </h3>
+              
+              {/* Tips Section */}
+              <div className="mb-6 bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <FaInfoCircle className="text-blue-600 text-xl flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-bold text-blue-900 mb-2">💡 Cara Mendapatkan Koordinat:</h4>
+                    <ol className="text-sm text-blue-800 space-y-2 ml-4 list-decimal">
+                      <li>Buka <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" className="font-semibold underline hover:text-blue-600">Google Maps</a></li>
+                      <li>Cari lokasi yang diinginkan</li>
+                      <li>Klik kanan pada lokasi tersebut</li>
+                      <li>Pilih koordinat yang muncul di bagian atas menu (format: latitude, longitude)</li>
+                      <li>Salin dan paste koordinat tersebut ke form di bawah</li>
+                    </ol>
+                    <div className="mt-3 p-2 bg-white rounded border border-blue-200">
+                      <p className="text-xs text-blue-700 font-mono">
+                        Contoh: 0.9629460591112564, 124.80253311393106
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Latitude (Garis Lintang) <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={formData.latitude}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        latitude: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all font-mono"
+                    placeholder="0.9629460591112564"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Koordinat vertikal (-90 hingga 90)
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Longitude (Garis Bujur) <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={formData.longitude}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        longitude: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all font-mono"
+                    placeholder="124.80253311393106"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Koordinat horizontal (-180 hingga 180)
+                  </p>
+                </div>
+              </div>
+
+              {/* Preview Link */}
+              <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm text-green-800">
+                    <FaMapMarkerAlt className="text-green-600" />
+                    <span className="font-semibold">Lihat lokasi di Google Maps:</span>
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps?q=${formData.latitude},${formData.longitude}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-semibold"
+                  >
+                    <FaExternalLinkAlt />
+                    Buka Maps
+                  </a>
                 </div>
               </div>
             </div>

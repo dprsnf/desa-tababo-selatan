@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from "../app/generated/prisma/client";
+import { PrismaClient} from "../app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
 import bcrypt from "bcryptjs";
@@ -15,61 +15,77 @@ async function main() {
   console.log("🌱 Mulai seeding database...");
 
   // 1. Admin
-  const hashedPassword = await bcrypt.hash("admin123", 12);
-  const admin = await prisma.admin.upsert({
-    where: { username: "admin" },
-    update: {},
-    create: {
-      username: "admin",
-      email: "admin@desatababoselatan.id",
-      password: hashedPassword,
-      namaLengkap: "Administrator Desa",
-      role: "superadmin",
-      aktif: true,
-    },
-  });
-  console.log("✅ Admin user dibuat:", admin.username);
+  const existingAdmin = await prisma.admin.count();
+
+  if (existingAdmin > 0) {
+    console.log("⏭️  Admin user sudah ada, dilewati");
+  } else {
+    const hashedPassword = await bcrypt.hash("admin123", 12);
+    const admin = await prisma.admin.create({
+      data: {
+        username: "admin",
+        email: "admin@desatababoselatan.id",
+        password: hashedPassword,
+        namaLengkap: "Administrator Desa",
+        role: "superadmin",
+        aktif: true,
+      },
+    });
+    console.log("✅ Admin user dibuat:", admin.username);
+  }
 
   // 2. Statistik
-  const stats = await prisma.statistik.upsert({
+  const existingStats = await prisma.statistik.findUnique({
     where: { id: "default" },
-    update: {},
-    create: {
-      id: "default",
-      jumlahPenduduk: 5247,
-      lakiLaki: 2650,
-      perempuan: 2597,
-      jumlahKeluarga: 1389,
-      luasWilayah: "25.5 km²",
-      jumlahRW: 8,
-      jumlahRT: 24,
-      jumlahDusun: 4,
-    },
   });
-  console.log("✅ Statistik dibuat");
+
+  if (existingStats) {
+    console.log("⏭️  Statistik sudah ada, dilewati");
+  } else {
+    await prisma.statistik.create({
+      data: {
+        id: "default",
+        jumlahPenduduk: 5247,
+        lakiLaki: 2650,
+        perempuan: 2597,
+        jumlahKeluarga: 1389,
+        luasWilayah: "25.5 km²",
+        jumlahRW: 8,
+        jumlahRT: 24,
+        jumlahDusun: 4,
+      },
+    });
+    console.log("✅ Statistik dibuat");
+  }
 
   // 3. Pengaturan
-  const pengaturan = await prisma.pengaturan.upsert({
+  const existingPengaturan = await prisma.pengaturan.findUnique({
     where: { id: "default" },
-    update: {},
-    create: {
-      id: "default",
-      namaSitus: "Website Desa Tababo Selatan",
-      tagline: "Desa Sejahtera, Masyarakat Berdaya",
-      deskripsiSitus:
-        "Website resmi Pemerintah Desa Tababo Selatan, Kecamatan Tababo, Kabupaten Kepulauan Sangihe, Provinsi Sulawesi Utara. Menyediakan informasi dan layanan publik untuk masyarakat.",
-      alamatKantor:
-        "Jl. Trans Sangihe, Desa Tababo Selatan, Kec. Tababo, Kab. Kepulauan Sangihe, Sulawesi Utara 95819",
-      emailKontak: "pemdes@tababoselatan.id",
-      teleponKontak: "0821-9999-8888",
-      jamOperasional: "Senin - Jumat: 08.00 - 15.00 WITA",
-      facebook: "https://facebook.com/desatababoselatan",
-      instagram: "https://instagram.com/desatababoselatan",
-      metaKeywords: "desa tababo selatan, sangihe, sulawesi utara, pemerintah desa",
-      metaDescription: "Website resmi Desa Tababo Selatan - Informasi, layanan, dan transparansi pemerintahan desa",
-    },
   });
-  console.log("✅ Pengaturan dibuat");
+
+  if (existingPengaturan) {
+    console.log("⏭️  Pengaturan sudah ada, dilewati");
+  } else {
+    await prisma.pengaturan.create({
+      data: {
+        id: "default",
+        namaSitus: "Website Desa Tababo Selatan",
+        tagline: "Desa Sejahtera, Masyarakat Berdaya",
+        deskripsiSitus:
+          "Website resmi Pemerintah Desa Tababo Selatan, Kecamatan Tababo, Kabupaten Kepulauan Sangihe, Provinsi Sulawesi Utara. Menyediakan informasi dan layanan publik untuk masyarakat.",
+        alamatKantor:
+          "Jl. Trans Sangihe, Desa Tababo Selatan, Kec. Tababo, Kab. Kepulauan Sangihe, Sulawesi Utara 95819",
+        emailKontak: "pemdes@tababoselatan.id",
+        teleponKontak: "0821-9999-8888",
+        jamOperasional: "Senin - Jumat: 08.00 - 15.00 WITA",
+        facebook: "https://facebook.com/desatababoselatan",
+        instagram: "https://instagram.com/desatababoselatan",
+        metaKeywords: "desa tababo selatan, sangihe, sulawesi utara, pemerintah desa",
+        metaDescription: "Website resmi Desa Tababo Selatan - Informasi, layanan, dan transparansi pemerintahan desa",
+      },
+    });
+    console.log("✅ Pengaturan dibuat");
+  }
 
   // 4. Kepala Desa & Perangkat
   const kepalaDesaData = [
@@ -147,12 +163,18 @@ async function main() {
     },
   ];
 
-  for (const perangkat of kepalaDesaData) {
-    await prisma.kepalaDesaPerangkat.create({
-      data: perangkat as any,
-    });
+  const existingPerangkat = await prisma.kepalaDesaPerangkat.count();
+  
+  if (existingPerangkat > 0) {
+    console.log("⏭️  Kepala Desa & Perangkat sudah ada, dilewati");
+  } else {
+    for (const perangkat of kepalaDesaData) {
+      await prisma.kepalaDesaPerangkat.create({
+        data: perangkat as any,
+      });
+    }
+    console.log("✅ Kepala Desa & Perangkat dibuat:", kepalaDesaData.length);
   }
-  console.log("✅ Kepala Desa & Perangkat dibuat:", kepalaDesaData.length);
 
   // 5. Berita
   const beritaData = [
@@ -194,10 +216,16 @@ async function main() {
     },
   ];
 
-  for (const berita of beritaData) {
-    await prisma.berita.create({ data: berita });
+  const existingBerita = await prisma.berita.count();
+  
+  if (existingBerita > 0) {
+    console.log("⏭️  Berita sudah ada, dilewati");
+  } else {
+    for (const berita of beritaData) {
+      await prisma.berita.create({ data: berita });
+    }
+    console.log("✅ Berita dibuat:", beritaData.length);
   }
-  console.log("✅ Berita dibuat:", beritaData.length);
 
   // 6. Program & Kegiatan
   const programData = [
@@ -269,10 +297,16 @@ async function main() {
     },
   ];
 
-  for (const program of programData) {
-    await prisma.program.create({ data: program });
+  const existingProgram = await prisma.program.count();
+  
+  if (existingProgram > 0) {
+    console.log("⏭️  Program sudah ada, dilewati");
+  } else {
+    for (const program of programData) {
+      await prisma.program.create({ data: program });
+    }
+    console.log("✅ Program dibuat:", programData.length);
   }
-  console.log("✅ Program dibuat:", programData.length);
 
   // 7. Pertanggungjawaban
   const pertanggungjawabanData = [
@@ -296,10 +330,16 @@ async function main() {
     },
   ];
 
-  for (const laporan of pertanggungjawabanData) {
-    await prisma.pertanggungjawaban.create({ data: laporan as any });
+  const existingPertanggungjawaban = await prisma.pertanggungjawaban.count();
+  
+  if (existingPertanggungjawaban > 0) {
+    console.log("⏭️  Pertanggungjawaban sudah ada, dilewati");
+  } else {
+    for (const laporan of pertanggungjawabanData) {
+      await prisma.pertanggungjawaban.create({ data: laporan as any });
+    }
+    console.log("✅ Pertanggungjawaban dibuat:", pertanggungjawabanData.length);
   }
-  console.log("✅ Pertanggungjawaban dibuat:", pertanggungjawabanData.length);
 
   // 8. Layanan
   const layananData = [
@@ -370,10 +410,16 @@ async function main() {
     },
   ];
 
-  for (const layanan of layananData) {
-    await prisma.layanan.create({ data: layanan as any });
+  const existingLayanan = await prisma.layanan.count();
+  
+  if (existingLayanan > 0) {
+    console.log("⏭️  Layanan sudah ada, dilewati");
+  } else {
+    for (const layanan of layananData) {
+      await prisma.layanan.create({ data: layanan as any });
+    }
+    console.log("✅ Layanan dibuat:", layananData.length);
   }
-  console.log("✅ Layanan dibuat:", layananData.length);
 
   // 9. FAQ
   const faqData = [
@@ -411,10 +457,16 @@ async function main() {
     },
   ];
 
-  for (const faq of faqData) {
-    await prisma.fAQ.create({ data: faq });
+  const existingFAQ = await prisma.fAQ.count();
+  
+  if (existingFAQ > 0) {
+    console.log("⏭️  FAQ sudah ada, dilewati");
+  } else {
+    for (const faq of faqData) {
+      await prisma.fAQ.create({ data: faq });
+    }
+    console.log("✅ FAQ dibuat:", faqData.length);
   }
-  console.log("✅ FAQ dibuat:", faqData.length);
 
   // 10. Profile Desa
   const profileData = [
@@ -443,10 +495,16 @@ async function main() {
     },
   ];
 
-  for (const profile of profileData) {
-    await prisma.profileDesa.create({ data: profile as any });
+  const existingProfile = await prisma.profileDesa.count();
+  
+  if (existingProfile > 0) {
+    console.log("⏭️  Profile Desa sudah ada, dilewati");
+  } else {
+    for (const profile of profileData) {
+      await prisma.profileDesa.create({ data: profile as any });
+    }
+    console.log("✅ Profile Desa dibuat:", profileData.length);
   }
-  console.log("✅ Profile Desa dibuat:", profileData.length);
 
   // 11. Potensi Desa
   const potensiData = [
@@ -476,10 +534,16 @@ async function main() {
     },
   ];
 
-  for (const potensi of potensiData) {
-    await prisma.potensiDesa.create({ data: potensi });
+  const existingPotensi = await prisma.potensiDesa.count();
+  
+  if (existingPotensi > 0) {
+    console.log("⏭️  Potensi Desa sudah ada, dilewati");
+  } else {
+    for (const potensi of potensiData) {
+      await prisma.potensiDesa.create({ data: potensi });
+    }
+    console.log("✅ Potensi Desa dibuat:", potensiData.length);
   }
-  console.log("✅ Potensi Desa dibuat:", potensiData.length);
 
   // 12. Hero Section
   const heroData = {
@@ -494,8 +558,14 @@ async function main() {
     aktif: true,
   };
 
-  await prisma.heroSection.create({ data: heroData });
-  console.log("✅ Hero Section dibuat");
+  const existingHero = await prisma.heroSection.count();
+  
+  if (existingHero > 0) {
+    console.log("⏭️  Hero Section sudah ada, dilewati");
+  } else {
+    await prisma.heroSection.create({ data: heroData });
+    console.log("✅ Hero Section dibuat");
+  }
 
   console.log("\n🎉 Seeding selesai!");
   console.log("==========================================");

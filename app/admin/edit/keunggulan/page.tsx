@@ -113,7 +113,7 @@ function EditKeunggulan() {
       setSaving(true);
 
       // Get token from localStorage
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("adminToken");
 
       const response = await fetch("/api/keunggulan", {
         method: "PUT",

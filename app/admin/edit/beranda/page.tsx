@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth, withAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { FaSave, FaEye, FaImage, FaPlus, FaTrash } from "react-icons/fa";
+import { FaSave, FaEye, FaPlus, FaTrash } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import AdminNavbar from "@/components/AdminNavbar";
 
@@ -23,14 +23,6 @@ function EditBeranda() {
       { label: "Luas Wilayah", value: "450 Ha" },
       { label: "Dusun", value: "4" },
       { label: "UMKM Aktif", value: "50+" },
-    ],
-    news: [
-      {
-        title: "Program Pembangunan Infrastruktur 2024",
-        date: "15 November 2024",
-      },
-      { title: "Pelatihan UMKM Desa Sukses Digelar", date: "10 November 2024" },
-      { title: "Panen Raya Padi Tahun Ini Meningkat", date: "5 November 2024" },
     ],
   });
 
@@ -62,7 +54,6 @@ function EditBeranda() {
               "Kecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]",
             heroImage: result.data.hero.gambar || "",
             stats: result.data.stats || formData.stats,
-            news: formData.news, // News tetap dari state lokal untuk sementara
           });
         }
       }
@@ -310,72 +301,6 @@ function EditBeranda() {
                     <button className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
                       <FaTrash />
                     </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* News */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-800">
-                  Berita & Kegiatan
-                </h2>
-                <button className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                  <FaPlus />
-                  Tambah
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {formData.news.map((item, index) => (
-                  <div
-                    key={index}
-                    className="p-4 border-2 border-gray-100 rounded-lg hover:border-green-200 transition-colors"
-                  >
-                    <div className="flex gap-3 items-start mb-3">
-                      <div className="flex-1 space-y-3">
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-600 mb-1">
-                            Judul Berita
-                          </label>
-                          <input
-                            type="text"
-                            value={item.title}
-                            onChange={(e) => {
-                              const newNews = [...formData.news];
-                              newNews[index].title = e.target.value;
-                              setFormData({ ...formData, news: newNews });
-                            }}
-                            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-600 mb-1">
-                            Tanggal
-                          </label>
-                          <input
-                            type="text"
-                            value={item.date}
-                            onChange={(e) => {
-                              const newNews = [...formData.news];
-                              newNews[index].date = e.target.value;
-                              setFormData({ ...formData, news: newNews });
-                            }}
-                            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-green-500 outline-none text-sm text-gray-900"
-                          />
-                        </div>
-                      </div>
-                      <button className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
-                        <FaTrash />
-                      </button>
-                    </div>
-                    <div className="border-t pt-3">
-                      <button className="text-sm text-green-600 hover:text-green-700 font-medium flex items-center gap-2">
-                        <FaImage />
-                        Upload Gambar Berita
-                      </button>
-                    </div>
                   </div>
                 ))}
               </div>

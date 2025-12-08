@@ -20,6 +20,8 @@ export async function GET() {
           jumlahRW: 0,
           jumlahRT: 0,
           jumlahDusun: 0,
+          latitude: 0.9629460591112564,
+          longitude: 124.80253311393106,
         },
       });
     }
@@ -59,6 +61,8 @@ export async function PUT(request: NextRequest) {
           jumlahRW: parseInt(body.jumlahRW) || 0,
           jumlahRT: parseInt(body.jumlahRT) || 0,
           jumlahDusun: parseInt(body.jumlahDusun) || 0,
+          latitude: body.latitude !== undefined ? parseFloat(body.latitude) : 0.9629460591112564,
+          longitude: body.longitude !== undefined ? parseFloat(body.longitude) : 124.80253311393106,
         },
       });
     } else {
@@ -72,6 +76,8 @@ export async function PUT(request: NextRequest) {
           jumlahRW: parseInt(body.jumlahRW) || 0,
           jumlahRT: parseInt(body.jumlahRT) || 0,
           jumlahDusun: parseInt(body.jumlahDusun) || 0,
+          latitude: body.latitude !== undefined ? parseFloat(body.latitude) : 0.9629460591112564,
+          longitude: body.longitude !== undefined ? parseFloat(body.longitude) : 124.80253311393106,
         },
       });
     }

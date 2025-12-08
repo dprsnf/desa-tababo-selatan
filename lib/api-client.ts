@@ -38,6 +38,8 @@ interface StatistikData {
   jumlahRW: number;
   jumlahRT: number;
   jumlahDusun: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 interface ProgramData {

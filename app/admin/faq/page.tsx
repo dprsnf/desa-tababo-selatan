@@ -52,7 +52,7 @@ function FAQPage() {
     if (!confirm("Yakin ingin menghapus FAQ ini?")) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("adminToken");
       const response = await fetch(`/api/faq/${id}`, {
         method: "DELETE",
         headers: {
@@ -71,9 +71,9 @@ function FAQPage() {
     }
   };
 
-  const handleToggleAktif = async (id: string, currentStatus: boolean) => {
+  const handleStatusToggle = async (id: string, currentStatus: boolean) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("adminToken");
       const faq = faqs.find((f) => f.id === id);
       if (!faq) return;
 
@@ -243,7 +243,7 @@ function FAQPage() {
 
                         <div className="flex gap-2">
                           <button
-                            onClick={() => handleToggleAktif(faq.id, faq.aktif)}
+                            onClick={() => handleStatusToggle(faq.id, faq.aktif)}
                             className={`px-3 py-2 rounded-lg text-white text-sm transition-colors ${
                               faq.aktif
                                 ? "bg-orange-500 hover:bg-orange-600"
