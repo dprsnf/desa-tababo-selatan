@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { FaSignOutAlt, FaArrowLeft } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
@@ -21,7 +22,13 @@ export default function AdminNavbar({ onLogout }: AdminNavbarProps) {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <Link href="/admin/dashboard" className="flex items-center gap-3 text-white hover:text-green-100 transition-all">
-              <GiVillage className="text-4xl" />
+              <Image
+                src="/logo.png"
+                alt="Logo Desa"
+                width={48}
+                height={48}
+                className="object-contain"
+              />
               <div className="hidden md:block">
                 <div className="font-bold text-lg">Admin Panel</div>
                 <div className="text-xs text-green-200">Desa Tababo Selatan</div>

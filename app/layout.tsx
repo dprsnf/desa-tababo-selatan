@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Desa Tababo Selatan - Hijau, Sejahtera, Mandiri",
   description: "Website resmi Desa Tababo Selatan",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

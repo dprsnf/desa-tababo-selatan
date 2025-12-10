@@ -12,20 +12,59 @@ export async function GET() {
       return NextResponse.json({
         success: true,
         data: {
-          namaSitus: "Desa Tababo Selatan",
+          namaDesa: "Desa Tababo Selatan",
           tagline: "",
-          deskripsiSitus: "",
-          alamatKantor: "",
-          emailKontak: "",
-          teleponKontak: "",
+          alamat: "",
+          kecamatan: "",
+          kabupaten: "",
+          provinsi: "",
+          kodePos: "",
+          email: "",
+          telepon: "",
+          whatsapp: "",
+          facebook: "",
+          instagram: "",
+          youtube: "",
+          logo: "",
+          visi: "",
+          misi: "",
+          sejarah: "",
           jamOperasional: "",
+          kepalaDesaNama: "",
+          kepalaDesaNIP: "",
+          kepalaDesaFoto: ""
         },
       });
     }
 
+    // Map database fields to frontend fields
+    const mappedData = {
+      namaDesa: pengaturan.namaSitus || "",
+      tagline: pengaturan.tagline || "",
+      alamat: pengaturan.alamatKantor || "",
+      kecamatan: "",
+      kabupaten: "",
+      provinsi: "",
+      kodePos: pengaturan.kodePos || "",
+      email: pengaturan.emailKontak || "",
+      telepon: pengaturan.teleponKontak || "",
+      whatsapp: pengaturan.teleponKontak || "",
+      facebook: pengaturan.facebook || "",
+      instagram: pengaturan.instagram || "",
+      youtube: pengaturan.youtube || "",
+      logo: pengaturan.logo || "",
+      visi: "",
+      misi: "",
+      sejarah: "",
+      jamOperasional: pengaturan.jamOperasional || "",
+      kepalaDesaNama: "",
+      kepalaDesaNIP: "",
+      kepalaDesaFoto: ""
+    };
+
     return NextResponse.json({
       success: true,
-      data: pengaturan,
+      data: mappedData,
     });
   } catch (error) {
     console.error("Get pengaturan error:", error);
@@ -43,17 +82,51 @@ export async function PUT(request: NextRequest) {
 
     const body = await request.json();
 
+    // Map frontend fields to database fields
+    const mappedData: {
+      namaSitus?: string;
+      tagline?: string;
+      deskripsiSitus: string;
+      alamatKantor: string;
+      kodePos?: string;
+      emailKontak?: string;
+      teleponKontak?: string;
+      facebook?: string;
+      instagram?: string;
+      twitter?: string;
+      youtube?: string;
+      logo?: string;
+      jamOperasional?: string;
+    } = {
+      // Set required fields with default values
+      deskripsiSitus: body.sejarah || body.visi || "Website Desa",
+      alamatKantor: body.alamat || "",
+    };
+
+    // Map optional fields
+    if (body.namaDesa !== undefined) mappedData.namaSitus = body.namaDesa;
+    if (body.tagline !== undefined) mappedData.tagline = body.tagline;
+    if (body.kodePos !== undefined) mappedData.kodePos = body.kodePos;
+    if (body.email !== undefined) mappedData.emailKontak = body.email;
+    if (body.telepon !== undefined) mappedData.teleponKontak = body.telepon;
+    if (body.facebook !== undefined) mappedData.facebook = body.facebook;
+    if (body.instagram !== undefined) mappedData.instagram = body.instagram;
+    if (body.youtube !== undefined) mappedData.youtube = body.youtube;
+    if (body.logo !== undefined) mappedData.logo = body.logo;
+    if (body.jamOperasional !== undefined) mappedData.jamOperasional = body.jamOperasional;
+
     const existing = await prisma.pengaturan.findFirst();
 
     let pengaturan;
     if (existing) {
       pengaturan = await prisma.pengaturan.update({
         where: { id: existing.id },
-        data: body,
+        data: mappedData,
       });
     } else {
+      // Create with all required fields
       pengaturan = await prisma.pengaturan.create({
-        data: body,
+        data: mappedData,
       });
     }
 

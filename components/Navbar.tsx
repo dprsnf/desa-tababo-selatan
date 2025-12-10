@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { GiVillage } from "react-icons/gi";
@@ -79,7 +80,13 @@ export default function Navbar() {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-white/20 rounded-full blur-lg group-hover:bg-white/30 transition-all"></div>
-              <GiVillage className="text-5xl relative z-10 transform group-hover:scale-110 transition-transform" />
+              <Image
+                src="/logo.png"
+                alt="Logo Desa"
+                width={60}
+                height={60}
+                className="relative z-10 transform group-hover:scale-110 transition-transform object-contain"
+              />
             </div>
             <div>
               <div className="font-bold text-xl tracking-tight">Desa Tababo Selatan</div>
@@ -88,7 +95,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="hidden 2xl:flex items-center gap-2">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -116,7 +123,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden text-white text-2xl p-3 hover:bg-white/10 rounded-xl transition-all duration-300 active:scale-95"
+            className="2xl:hidden text-white text-2xl p-3 hover:bg-white/10 rounded-xl transition-all duration-300 active:scale-95"
             aria-label="Toggle menu"
           >
             {isOpen ? <FaTimes /> : <FaBars />}
@@ -125,7 +132,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <div 
-          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          className={`2xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
             isOpen ? "max-h-[500px] opacity-100 pb-4" : "max-h-0 opacity-0"
           }`}
         >

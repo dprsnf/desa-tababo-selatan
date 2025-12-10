@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   FaLeaf,
@@ -247,9 +248,15 @@ export default function Home() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mb-6"
+              className="mb-6 flex justify-center"
             >
-              <GiVillage className="text-8xl mx-auto text-green-200" />
+              <Image
+                src="/logo.png"
+                alt="Logo Desa Tababo Selatan"
+                width={200}
+                height={200}
+                className="object-contain"
+              />
             </motion.div>
 
             <motion.h1
